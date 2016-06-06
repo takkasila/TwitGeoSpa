@@ -1,0 +1,5 @@
+*.pyc
+*.gz
+test.py
+Keys.txt
+all.csv

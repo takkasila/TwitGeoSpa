@@ -70,6 +70,7 @@ if __name__ == '__main__':
             pvTree.SetValue(point = Point(lon, lat), value = pvGridData[iLat][iLon])
 
     pvTree.OptimizeTree()
-    pvTree.PrintTreeValue()
-    tPoint = Point(102.841941, 14.887933)
-    print pvTree.findValue(tPoint)
+
+    # Print tree
+    pvTree.GenEdge()
+    pvTree.graph.write_png('Thailand province QTree.png')

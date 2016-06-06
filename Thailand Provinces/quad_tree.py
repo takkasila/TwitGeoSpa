@@ -1,4 +1,5 @@
 import sys
+import pydot
 
 class Point:
     def __init__(self, x = 0, y = 0, xy = None):
@@ -29,6 +30,8 @@ class Rectangle:
 
 uid = 0
 class QuadTree:
+    graph = pydot.Dot(graph_type = 'graph')
+
     def __init__(self, level = 0, rect = Rectangle(), parent = None, value = 'NULL', maxLevel = None):
         self.level = level
         self.rect = rect
@@ -152,3 +155,14 @@ class QuadTree:
             child.parent = None
         self.childs = []
         return
+
+    def GenEdge(self):
+        if(len(self.childs) == 0):
+            return
+
+        for child in self.childs:
+            if( len(child.childs) == 0):
+                QuadTree.graph.add_edge(pydot.Edge(src = self.uid, dst = child.value))
+            else:
+                QuadTree.graph.add_edge(pydot.Edge(src = self.uid, dst = child.uid))
+                child.GenEdge()
