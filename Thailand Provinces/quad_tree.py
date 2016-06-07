@@ -35,8 +35,8 @@ class QuadTree:
     # True : Ouput only leaf grid
     # False : Output both parent and leaf grid
     OPTIMIZE_GRID_OUTPUT = True
-    boxCsvWriter = csv.writer(open('thailand_province_q_box.csv', 'wb'), delimiter = ';')
-    boxCsvWriter.writerow(['uid', 'polyline', 'isLeafNode', 'province'])
+    boxCsvWriter = None
+    treeCsvWriter = None
 
     def __init__(self, level = 0, rect = Rectangle(), parent = None, value = 'NULL', maxLevel = None):
         self.level = level
@@ -172,7 +172,13 @@ class QuadTree:
         polyline += ')'
         return polyline
 
-    def WriteBoxCSV(self):
+    def WriteBoxCSVStart(self, csvFileName, optimizeGridOutput = True):
+        QuadTree.boxCsvWriter = csv.writer(open(csvFileName, 'wb'), delimiter = ';')
+        QuadTree.boxCsvWriter.writerow(['uid', 'polyline', 'isLeafNode', 'value'])
+        QuadTree.OPTIMIZE_GRID_OUTPUT = optimizeGridOutput
+        self.__WriteBoxCSV()
+
+    def __WriteBoxCSV(self):
         if(QuadTree.OPTIMIZE_GRID_OUTPUT and len(self.childs) != 0):
             pass
         else:
@@ -185,3 +191,36 @@ class QuadTree:
 
         for child in self.childs:
             child.WriteBoxCSV()
+
+    def resetUID(self):
+        # Check if root node
+        global uid
+        if(self.parent == None):
+            uid = 0
+        self.uid = uid
+        uid += 1
+        for child in self.childs:
+            child.resetUID()
+
+    def exportTreeStructStart(self, csvFileName):
+        QuadTree.treeCsvWriter = csv.writer(open(csvFileName, 'wb'), delimiter = ' ')
+        QuadTree.treeCsvWriter.writerow([uid])
+        self.__exportTreeStruct_Node()
+        self.__exportTreeStruct_Edge()
+
+    def __exportTreeStruct_Node(self):
+        QuadTree.treeCsvWriter.writerow([
+            self.uid
+            , self.rect.topRight.x, self.rect.topRight.y
+            , self.rect.btmLeft.x, self.rect.btmLeft.y
+            , self.value
+        ])
+        for child in self.childs:
+            child.__exportTreeStruct_Node()
+
+    def __exportTreeStruct_Edge(self):
+        for child in self.childs:
+            QuadTree.treeCsvWriter.writerow([self.uid, child.uid])
+
+        for child in self.childs:
+            child.__exportTreeStruct_Edge()

@@ -70,7 +70,9 @@ if __name__ == '__main__':
             pvTree.SetValue(point = Point(lon, lat), value = pvGridData[iLat][iLon])
 
     pvTree.OptimizeTree()
-
+    pvTree.resetUID()
     # Export tree as rectangle by polyline
-    QuadTree.OPTIMIZE_GRID_OUTPUT = False
-    pvTree.WriteBoxCSV()
+    # pvTree.WriteBoxCSVStart(csvFileName = 'thailand_province_q_box_optimize.csv', optimizeGridOutput = True)
+
+    # Export tree as tree structure in csv form
+    pvTree.exportTreeStructStart('thailand_province_qtree_struct')
