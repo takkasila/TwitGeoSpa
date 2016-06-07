@@ -1,5 +1,6 @@
 import sys
 import pydot
+import csv
 
 class Point:
     def __init__(self, x = 0, y = 0, xy = None):
@@ -14,6 +15,7 @@ class Point:
         return Point(self.x+target.x, self.y+target.y)
 
 class Rectangle:
+
     def __init__(self, btmLeft = Point(0,0), topRight = Point(1,1)):
         self.btmLeft = btmLeft
         self.topRight = topRight
@@ -30,7 +32,11 @@ class Rectangle:
 
 uid = 0
 class QuadTree:
-    graph = pydot.Dot(graph_type = 'graph')
+    # True : Ouput only leaf grid
+    # False : Output both parent and leaf grid
+    OPTIMIZE_GRID_OUTPUT = True
+    boxCsvWriter = csv.writer(open('thailand_province_q_box.csv', 'wb'), delimiter = ';')
+    boxCsvWriter.writerow(['uid', 'polyline', 'isLeafNode', 'province'])
 
     def __init__(self, level = 0, rect = Rectangle(), parent = None, value = 'NULL', maxLevel = None):
         self.level = level
@@ -156,13 +162,26 @@ class QuadTree:
         self.childs = []
         return
 
-    def GenEdge(self):
-        if(len(self.childs) == 0):
-            return
+    def ConstructPolyLine(self):
+        polyline = 'LINESTRING('
+        polyline += str(self.rect.topRight.x)+' '+str(self.rect.topRight.y)
+        polyline += ', '+str(self.rect.btmLeft.x)+' '+str(self.rect.topRight.y)
+        polyline += ', '+str(self.rect.btmLeft.x)+' '+str(self.rect.btmLeft.y)
+        polyline += ', '+str(self.rect.topRight.x)+' '+str(self.rect.btmLeft.y)
+        polyline += ', '+str(self.rect.topRight.x)+' '+str(self.rect.topRight.y)
+        polyline += ')'
+        return polyline
+
+    def WriteBoxCSV(self):
+        if(QuadTree.OPTIMIZE_GRID_OUTPUT and len(self.childs) != 0):
+            pass
+        else:
+            QuadTree.boxCsvWriter.writerow(
+                [ self.uid
+                , self.ConstructPolyLine()
+                , len(self.childs) == 0
+                , self.value]
+            )
 
         for child in self.childs:
-            if( len(child.childs) == 0):
-                QuadTree.graph.add_edge(pydot.Edge(src = self.uid, dst = child.value))
-            else:
-                QuadTree.graph.add_edge(pydot.Edge(src = self.uid, dst = child.uid))
-                child.GenEdge()
+            child.WriteBoxCSV()

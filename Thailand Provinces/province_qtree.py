@@ -4,8 +4,8 @@ from math import *
 from quad_tree import *
 from province_grid import *
 
-def ReadProviGrid():
-    gridProviReader = csv.reader(open(sys.argv[1], 'rb'), delimiter = ',')
+def ReadProviGrid(csvFile):
+    gridProviReader = csv.reader(open(csvFile, 'rb'), delimiter = ',')
     proviGrid = []
     proviGrid.append([])
     lat = 0
@@ -30,7 +30,7 @@ if __name__ == '__main__':
         print 'Please insert GridProvinces.csv'
         exit()
 
-    pvGridData = ReadProviGrid()
+    pvGridData = ReadProviGrid(sys.argv[1])
 
     pvGridParm = ProviGridParm(
         btmLeft = Point(97.325565, 5.594899)
@@ -71,6 +71,6 @@ if __name__ == '__main__':
 
     pvTree.OptimizeTree()
 
-    # Print tree
-    pvTree.GenEdge()
-    pvTree.graph.write_png('Thailand province QTree.png')
+    # Export tree as rectangle by polyline
+    QuadTree.OPTIMIZE_GRID_OUTPUT = False
+    pvTree.WriteBoxCSV()
