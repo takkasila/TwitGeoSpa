@@ -1,2 +1,2 @@
-# GeoAnalysis_Twit
-Geo location based analysis using Twitter data
+# TwitGeoSpa
+Geospatial analysis and simulation using Twitter data
