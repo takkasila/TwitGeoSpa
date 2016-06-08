@@ -123,7 +123,7 @@ class QuadTree:
                     if(qTree.rect.isInside(point)):
                         return qTree.findValue(point)
         else:
-            return None
+            return 'NULL'
 
     def PrintTreeValue(self):
         for i in range(self.level):
