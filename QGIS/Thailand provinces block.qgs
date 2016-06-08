@@ -3,7 +3,7 @@
   <title></title>
   <layer-tree-group expanded="1" checked="Qt::Checked" name="">
     <customproperties/>
-    <layer-tree-layer expanded="1" checked="Qt::Checked" id="thailand_province_q_box_optimize20160607155643857" name="thailand_province_q_box_optimize">
+    <layer-tree-layer expanded="1" checked="Qt::Checked" id="thailand_province_q_box_optimize20160609000713960" name="thailand_province_q_box_optimize">
       <customproperties/>
     </layer-tree-layer>
     <layer-tree-layer expanded="1" checked="Qt::Checked" id="OSM_Mapnik20160607140713258" name="OSM Mapnik">
@@ -14,10 +14,10 @@
   <mapcanvas>
     <units>meters</units>
     <extent>
-      <xmin>10676700.4242380615323782</xmin>
-      <ymin>-281345.50863504805602133</ymin>
-      <xmax>13551473.33055812679231167</xmax>
-      <ymax>2464223.09606686234474182</ymax>
+      <xmin>10683258.64192532747983932</xmin>
+      <ymin>462609.98585019237361848</ymin>
+      <xmax>12766557.46096789091825485</xmax>
+      <ymax>2452276.6545463353395462</ymax>
     </extent>
     <rotation>0</rotation>
     <projections>1</projections>
@@ -37,6 +37,7 @@
     <layer_coordinate_transform_info>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:3857" srcDatumTransform="-1" destDatumTransform="-1" layerid="OpenLayers_plugin_layer20160607140148025"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:3857" srcDatumTransform="-1" destDatumTransform="-1" layerid="OSM_Mapnik20160607140713258"/>
+      <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="thailand_province_q_box_optimize20160609000713960"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="province_q_box20160607135224442"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:3857" srcDatumTransform="-1" destDatumTransform="-1" layerid="Landsat__Gis_Lab_info_20160607140304273"/>
       <layer_coordinate_transform destAuthId="EPSG:3857" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="thailand_province_q_box_optimize20160607155643857"/>
@@ -47,13 +48,13 @@
   <layer-tree-canvas>
     <custom-order enabled="0">
       <item>OSM_Mapnik20160607140713258</item>
-      <item>thailand_province_q_box_optimize20160607155643857</item>
+      <item>thailand_province_q_box_optimize20160609000713960</item>
     </custom-order>
   </layer-tree-canvas>
   <legend updateDrawingOrder="true">
     <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="thailand_province_q_box_optimize" showFeatureCount="0">
       <filegroup open="true" hidden="false">
-        <legendlayerfile isInOverview="0" layerid="thailand_province_q_box_optimize20160607155643857" visible="1"/>
+        <legendlayerfile isInOverview="0" layerid="thailand_province_q_box_optimize20160609000713960" visible="1"/>
       </filegroup>
     </legendlayer>
     <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="OSM Mapnik" showFeatureCount="0">
@@ -102,9 +103,9 @@
         <property key="zmin" value="0"/>
       </customproperties>
     </maplayer>
-    <maplayer minimumScale="-4.65661e-10" maximumScale="1e+08" simplifyDrawingHints="1" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Line" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
-      <id>thailand_province_q_box_optimize20160607155643857</id>
-      <datasource>file:../Thailand%20Provinces/thailand_province_q_box_optimize.csv?type=csv&amp;delimiter=%5Ct;&amp;wktField=polyline&amp;spatialIndex=no&amp;subsetIndex=no&amp;watchFile=no</datasource>
+    <maplayer minimumScale="0" maximumScale="1e+08" simplifyDrawingHints="1" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Line" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
+      <id>thailand_province_q_box_optimize20160609000713960</id>
+      <datasource>file:../Province/thailand_province_q_box_optimize.csv?type=csv&amp;delimiter=%5Ct;&amp;wktField=polyline&amp;spatialIndex=no&amp;subsetIndex=no&amp;watchFile=no</datasource>
       <shortname>thailand_province_q_box_optimize</shortname>
       <title></title>
       <abstract></abstract>
@@ -139,23 +140,23 @@
         <edittype widgetv2type="TextEdit" name="isLeafNode">
           <widgetv2config IsMultiline="0" fieldEditable="1" UseHtml="0" labelOnTop="0"/>
         </edittype>
-        <edittype widgetv2type="TextEdit" name="province">
+        <edittype widgetv2type="TextEdit" name="value">
           <widgetv2config IsMultiline="0" fieldEditable="1" UseHtml="0" labelOnTop="0"/>
         </edittype>
       </edittypes>
       <renderer-v2 forceraster="0" symbollevels="0" type="singleSymbol" enableorderby="0">
         <symbols>
-          <symbol alpha="1" clip_to_extent="1" type="line" name="0">
+          <symbol alpha="0.290196" clip_to_extent="1" type="line" name="0">
             <layer pass="0" class="SimpleLine" locked="0">
-              <prop k="capstyle" v="square"/>
+              <prop k="capstyle" v="round"/>
               <prop k="customdash" v="5;2"/>
               <prop k="customdash_map_unit_scale" v="0,0,0,0,0,0"/>
               <prop k="customdash_unit" v="MM"/>
               <prop k="draw_inside_polygon" v="0"/>
-              <prop k="joinstyle" v="bevel"/>
-              <prop k="line_color" v="237,0,3,255"/>
+              <prop k="joinstyle" v="round"/>
+              <prop k="line_color" v="200,0,0,255"/>
               <prop k="line_style" v="solid"/>
-              <prop k="line_width" v="0.26"/>
+              <prop k="line_width" v="0.7"/>
               <prop k="line_width_unit" v="MM"/>
               <prop k="offset" v="0"/>
               <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
@@ -201,7 +202,7 @@
         <property key="labeling/fitInPolygonOnly" value="false"/>
         <property key="labeling/fontCapitals" value="0"/>
         <property key="labeling/fontFamily" value="Ubuntu"/>
-        <property key="labeling/fontItalic" value="false"/>
+        <property key="labeling/fontItalic" value="true"/>
         <property key="labeling/fontLetterSpacing" value="0"/>
         <property key="labeling/fontLimitPixelSize" value="false"/>
         <property key="labeling/fontMaxPixelSize" value="10000"/>
@@ -212,7 +213,7 @@
         <property key="labeling/fontSizeMapUnitMinScale" value="0"/>
         <property key="labeling/fontStrikeout" value="false"/>
         <property key="labeling/fontUnderline" value="false"/>
-        <property key="labeling/fontWeight" value="50"/>
+        <property key="labeling/fontWeight" value="63"/>
         <property key="labeling/fontWordSpacing" value="0"/>
         <property key="labeling/formatNumbers" value="false"/>
         <property key="labeling/isExpression" value="true"/>
@@ -346,7 +347,7 @@
         <selectedonly on=""/>
       </labelattributes>
       <SingleCategoryDiagramRenderer diagramType="Pie">
-        <DiagramCategory penColor="#000000" labelPlacementMethod="XHeight" penWidth="0" diagramOrientation="Up" minimumSize="0" barWidth="5" penAlpha="255" maxScaleDenominator="1e+08" backgroundColor="#ffffff" transparency="0" width="15" scaleDependency="Area" backgroundAlpha="255" angleOffset="1440" scaleBasedVisibility="0" enabled="0" height="15" sizeType="MM" minScaleDenominator="-4.65661e-10">
+        <DiagramCategory penColor="#000000" labelPlacementMethod="XHeight" penWidth="0" diagramOrientation="Up" minimumSize="0" barWidth="5" penAlpha="255" maxScaleDenominator="1e+08" backgroundColor="#ffffff" transparency="0" width="15" scaleDependency="Area" backgroundAlpha="255" angleOffset="1440" scaleBasedVisibility="0" enabled="0" height="15" sizeType="MM" minScaleDenominator="0">
           <fontProperties description="Ubuntu,11,-1,5,50,0,0,0,0,0" style=""/>
         </DiagramCategory>
       </SingleCategoryDiagramRenderer>
