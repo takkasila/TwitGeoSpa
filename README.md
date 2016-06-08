@@ -13,7 +13,11 @@ Geospatial analysis and simulation using Twitter data
     from geo_finder import *
     print GeoFinder.FindCountryAndProvinceByLatLon_Real(lat = 13.7563486, lon = 100.4557333)
     ```
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> e1414d438067c80ad2f45ea520b192cba149d996
     ```
     [u'Thailand', 'Krung Thep Maha Nakhon']
     ```
@@ -42,4 +46,8 @@ Geospatial analysis and simulation using Twitter data
 
   2. #### Read and Export
       **file**: `/Province/province_qtree.py`  
+<<<<<<< HEAD
       Input your result of scanning province grids from the first step. Then program will result quadtree file datastructure contains node and edge of tree in csv format `/Province/thailand_province_qtree_struct.csv`. For general use, export format can be found in `/Province/quad_tree.py`.
+=======
+      Input your result of scanning province grids from the first step. Then program will result quadtree file datastructure contains node and edge of tree in csv format `/Province/thailand_province_qtree_struct.csv`. For general use, export format can be found in `/Province/quad_tree.py`.
+>>>>>>> e1414d438067c80ad2f45ea520b192cba149d996
