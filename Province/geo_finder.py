@@ -5,7 +5,7 @@ import json
 import urllib2
 from quad_tree import *
 
-GeoCodeAPIKey = 'AIzaSyDB9F6u4G0EAZqHYrcI6u0_aY5BagwhrPA'
+GeoCodeAPIKey = ''
 class GeoFinder:
     def __init__(self, province_qtree_csv):
         qTreeImporter = QuadTreeImporter(province_qtree_csv)
