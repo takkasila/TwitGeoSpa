@@ -13,6 +13,7 @@ Geospatial analysis and simulation using Twitter data
     from geo_finder import *
     print GeoFinder.FindCountryAndProvinceByLatLon_Real(lat = 13.7563486, lon = 100.4557333)
     ```
+    
     ```
     [u'Thailand', 'Krung Thep Maha Nakhon']
     ```
@@ -26,6 +27,7 @@ Geospatial analysis and simulation using Twitter data
     from geo_finder import *
     geoFinder = GeoFinder('/Province/thailand_province_qtree_struct.csv')
     print geoFinder.FindProvinceByLatLon_Estimate(lat = 13.7563486, lon = 100.4557333)
+    ```
     ```
     Bangkok
     ```
