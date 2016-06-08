@@ -20,8 +20,8 @@ Geospatial analysis and simulation using Twitter data
 
   - #### Using Quadtree datastructure of provinces  
     Without regrad of require no internet connection, this method also come with speed of [Quadtree](https://en.wikipedia.org/wiki/Quadtree) search `O(log(n))`. You will need to provide proper quadtree of province in area of your search. See below how to create your own quadtree.  
-**file**: `/province/geo_finder.py`
-**usage**:  
+    **file**: `/province/geo_finder.py`  
+    **usage**:  
 
     ```python
     from geo_finder import *
