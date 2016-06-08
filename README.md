@@ -35,9 +35,11 @@ Geospatial analysis and simulation using Twitter data
 - ### Quadtree  
   **file**: `/Province/quad_tree.py`  
   Above is a render of quadtree of provinces in Thailand `/Province/thailand_province_qtree_struct.csv` with scan area of 10 km square. There are two steps on creating your own quadtree.  
+
   1. #### Scan  
       **file**: `/Province/province_grid.py`  
       Insert latitude and longitude of area you want to scan in rectangular form. This process might take a lot of time depends on how precise you want your quadtree will be (scan grid size), how large you want to cover and how fast your internet is (because we're using Geocode API). This will result grid of provinces in csv form `/Provinces/GridProvinces.csv`
+
   2. #### Read and Export
       **file**: `/Province/province_qtree.py`  
       Input your result of scanning province grids from the first step. Then program will result quadtree file datastructure contains node and edge of tree in csv format `/Province/thailand_province_qtree_struct.csv`. For general use, export format can be found in `/Province/quad_tree.py`.
