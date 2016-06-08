@@ -1,7 +1,7 @@
 import csv
 import sys
 import json
-sys.path.insert(0, './Thailand Provinces')
+sys.path.insert(0, './Provinces')
 from FindProviByLatLon import FindProvByLatLong
 
 # Input file name as first argv
