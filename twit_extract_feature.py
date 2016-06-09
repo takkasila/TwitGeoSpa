@@ -44,6 +44,8 @@ def SyncProvinceName(province):
         province = 'Loei Province'
     elif(province == 'Phang-nga'):
         province = 'Phang Nga'
+    elif(province == 'Lopburi'):
+        province = 'Lopburi Province'
 
     return province
 
