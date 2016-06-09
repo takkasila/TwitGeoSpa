@@ -18,7 +18,7 @@ Geospatial analysis and simulation using Twitter data
     ```
 
   - #### Using Quadtree datastructure of provinces  
-    Without regrad of require no internet connection, this method also come with speed of [Quadtree](https://en.wikipedia.org/wiki/Quadtree) search `O(log(n))`. You will need to provide proper quadtree of province in area of your search. See [below](https://github.com/takkasila/TwitGeoSpa#quadtree) on how to create your own quadtree.  
+    Without regard of requiring no internet connection, this method also come with speed of [Quadtree](https://en.wikipedia.org/wiki/Quadtree) search `O(log(n))`. You will need to provide proper quadtree of province in area of your search. See [below](https://github.com/takkasila/TwitGeoSpa#quadtree) on how to create your own quadtree.  
     **file**: `/province/geo_finder.py`  
     **usage**:  
 
@@ -43,4 +43,3 @@ Geospatial analysis and simulation using Twitter data
   2. #### Read and Export
       **file**: `/Province/province_qtree.py`  
       Input your result of scanning province grids from the first step. Then program will result quadtree file datastructure contains node and edge of tree in csv format `/Province/thailand_province_qtree_struct.csv`. For general use, export format can be found in `/Province/quad_tree.py`.
-
