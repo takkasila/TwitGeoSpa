@@ -66,9 +66,9 @@ if __name__ == '__main__':
                 abbr = provinces[f1][1]
                 index = provinces[f1][2]
 
-        dateTime = EpochToDataTime(int(row[3]))
+        dateTime = EpochToDataTime(int(row[2]))
         twitCsvWriter.writerow({
-            'uid': int(row[2])
+            'uid': int(row[3])
             , 'lat':float(row[1])
             , 'lon':float(row[0])
             , 'province':province
