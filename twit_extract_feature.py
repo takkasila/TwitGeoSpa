@@ -23,6 +23,30 @@ def EpochToDataTime(epoch):
     time = t.strftime('%H:%M:%S', t.localtime(epoch))
     return {'date': date, 'time': time}
 
+def SyncProvinceName(province):
+
+    if('Chang Wat' in province):
+        province = province[len('Chang Wat '): len(province)]
+
+    if(province == 'Krung Thep Maha Nakhon'):
+        province = 'Bangkok'
+    elif(province == 'Chon Buri'):
+        province = 'Chonburi'
+    elif(province == 'Si Sa Ket'):
+        province = 'Sisaket'
+    elif(province == 'Prachin Buri'):
+        province = 'Prachinburi'
+    elif(province == 'Buri Ram'):
+        province = 'Buriram'
+    elif(province == 'Chon Buri'):
+        province = 'Chonburi'
+    elif(province == 'Loei'):
+        province = 'Loei Province'
+    elif(province == 'Phang-nga'):
+        province = 'Phang Nga'
+
+    return province
+
 # Export format
 # uid, lat, lon, province, province_abbr, province_abbr_index, epoch, date, time
 if __name__ == '__main__':
@@ -43,6 +67,8 @@ if __name__ == '__main__':
 
     twitCsvWriter.writeheader()
     isFirstLine = True
+    nullProvinceMap_origin = []
+    nullProvinceMap_target = []
     for row in twitCsvReader :
         if(isFirstLine):
             isFirstLine = False
@@ -53,10 +79,7 @@ if __name__ == '__main__':
             , lon = float(row[0])
         )
 
-        if('Chang Wat' in province):
-            province = province[len('Chang Wat '): len(province)]
-        if(province == 'Krung Thep Maha Nakhon'):
-            province = 'Bangkok'
+        province = SyncProvinceName(province)
 
         # Find province Abbr, Index
         abbr = 'NULL'
@@ -65,6 +88,9 @@ if __name__ == '__main__':
             if(province == provinces[f1][0]):
                 abbr = provinces[f1][1]
                 index = provinces[f1][2]
+
+        if(abbr == 'NULL'):
+            continue
 
         dateTime = EpochToDataTime(int(row[2]))
         twitCsvWriter.writerow({
