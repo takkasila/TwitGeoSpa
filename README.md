@@ -32,7 +32,7 @@ Geospatial analysis and simulation using Twitter data
     ```
 
 - ### Quadtree  
-  ![](https://raw.githubusercontent.com/takkasila/TwitGeoSpa/master/QGIS/Thailand_provinces_qtree.png)  
+  ![](https://raw.githubusercontent.com/takkasila/TwitGeoSpa/master/Visualize/QGIS/Thailand_provinces_qtree.png)  
   **file**: `/Province/quad_tree.py`  
   Above is a render of quadtree of provinces in Thailand `/Province/thailand_province_qtree_struct.csv` with scan area of 10 km square. There are two steps on creating your own quadtree.  
 
