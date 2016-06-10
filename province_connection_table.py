@@ -42,12 +42,12 @@ class ProvinceTable:
     def createTableOfCommonUID(self):
         for f1 in range(len(self.provinces)):
             for f2 in range(f1 + 1, len(self.provinces)):
-                totalIntersect = self.provinces[f1].findCommonID(targetProvi= self.provinces[f2])
+                totalIntersect = len(self.provinces[f1].findCommonUID(targetProvi= self.provinces[f2]))
 
                 self.table[f1][f2] = totalIntersect
                 self.table[f2][f1] = totalIntersect
                 try:
-                    norm = float(totalIntersect) / ( self.provinces[f1].totalID + self.provinces[f2].totalID - totalIntersect)
+                    norm = float(totalIntersect) / ( len(self.provinces[f1].uidList) + len(self.provinces[f2].uidList) - totalIntersect)
                     self.table_norm[f1][f2] = norm
                     self.table_norm[f2][f1] = norm
                 except:

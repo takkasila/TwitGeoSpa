@@ -102,7 +102,7 @@ if __name__ == '__main__':
             , 'province':province
             , 'province_abbr':abbr
             , 'province_abbr_index':index
-            , 'epoch':int(row[3])
+            , 'epoch':int(row[2])
             , 'date': dateTime['date']
             , 'time': dateTime['time']
         })
