@@ -74,9 +74,11 @@ class Province:
         return count
 
 class ProvinceHolder:
-    def __init__(self):
+    def __init__(self, csvFile = None):
         self.provinces = []
         self.__createListOfProvinces()
+        if csvFile != None:
+            self.readDataFromCsv(csvFile)
 
     def __createListOfProvinces(self):
         # Create list of provinces

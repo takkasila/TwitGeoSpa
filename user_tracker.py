@@ -1,7 +1,6 @@
 import sys
 import csv
 from collections import OrderedDict
-import pickle
 
 class HistoryData:
 

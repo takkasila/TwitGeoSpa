@@ -1,30 +1,29 @@
 import sys
 sys.path.insert(0, '../')
+sys.path.insert(1, '../Province')
+from provinces import *
 from user_tracker import *
-import matplotlib
+import matplotlib.pyplot as plt
+import statistics
 
-def printHist(Hist):
-    sys.stdout.write('{} :'.format(len(Hist)))
-    for hist in Hist.values():
-        sys.stdout.write(' {}, {};'.format(hist.province_name, hist.time))
-    print ' '
-
-if __name__ == '__main__':
-
+def plotFreq():
     if(len(sys.argv) < 2):
         print 'Please insert: processed twitdata .csv'
         exit()
 
     userTracker = UserTracker(twitDataCsv= sys.argv[1])
 
+    travelFreq = [0 for x in range(20)]
     for user in userTracker.uidList.values():
+        try:
+            travelFreq[len(user.mergeHist) -1] += 1
+        except:
+            pass
 
-        print '--------------'
-        printHist(user.history)
-        printHist(user.mergeHist)
+    plt.plot(travelFreq, 'ro', travelFreq, 'b-')
+    plt.xlabel('Number of travel')
+    plt.ylabel('Number of UID')
+    plt.show()
 
-
-        # print '{}, {}'.format(len(user.history), len(user.merge))
-        # for hist in user.mergeHist.values():
-
-        # print len(user.getUniqueProvinceHist())
+if __name__ == '__main__':
+    plotFreq()
