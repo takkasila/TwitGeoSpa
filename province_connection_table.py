@@ -1,36 +1,9 @@
 import sys
+sys.path.insert(0, './Province')
 import csv
 import twit_extract_feature
 import pandas
-
-class Province:
-    def __init__(self, name, abbr, abbr_id):
-        self.name = name
-        self.abbr = abbr
-        self.abbr_id = abbr_id
-        self.uidList = []
-        # Non unique
-        self.idCount = {}
-        self.totalID = 0
-
-    def addID(self, uid):
-        # self.idList.append(uid)
-        if uid not in self.uidList:
-            self.uidList.append(uid)
-            self.idCount[uid] = 1
-        else:
-            self.idCount[uid] += 1
-        self.totalID += 1
-
-    def findCommonUID(self, targetProvi):
-        return list(set(self.uidList).intersection(targetProvi.uidList))
-
-    def findCommonID(self, targetProvi):
-        commonUID = self.findCommonUID(targetProvi)
-        count = 0
-        for id in commonUID:
-            count += self.idCount[id]
-        return count
+from provinces import *
 
 class ProvinceTable:
     def __init__(self, provinces):
@@ -73,22 +46,10 @@ if __name__ == '__main__':
         print 'Please insert processed twitdata .csv and output file name.'
         exit()
 
-    # Create list of provinces
-    provinces_csv = twit_extract_feature.ReadProvinceCSV('./Province/Province from Wiki Html table to CSV/ThailandProvinces_abbr.csv')
-    provinces = []
-    for provi in provinces_csv:
-        provinces.append(Province(
-            name = provi[0]
-            , abbr = provi[1]
-            , abbr_id = provi[2] -1
-        ))
+    provinceHolder = ProvinceHolder()
 
-    # uid,lat,lon,province,province_abbr,province_abbr_index,epoch,date,time
-    twitCsvReader = csv.DictReader(open(sys.argv[1]))
-    for row in twitCsvReader:
-        provinces[int(row['province_abbr_index']) - 1].addID(int(row['uid']))
-
-    provinceTable = ProvinceTable(provinces)
+    provinceHolder.readDataFromCsv(sys.argv[1])
+    provinceTable = ProvinceTable(provinceHolder.provinces)
 
     fileName = sys.argv[2]
     provinceTable.exportToCSV(fileName)
