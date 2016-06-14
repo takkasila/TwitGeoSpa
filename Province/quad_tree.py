@@ -14,6 +14,9 @@ class Point:
     def __add__ (self, target):
         return Point(self.x+target.x, self.y+target.y)
 
+    def getTuple(self):
+        return (self.x, self.y)
+
 class Rectangle:
 
     def __init__(self, btmLeft = Point(0,0), topRight = Point(1,1)):

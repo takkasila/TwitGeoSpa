@@ -1,24 +1,22 @@
 import csv
 import sys
 import math
-from find_province import FindProvinceByLatLong
+from geo_finder import *
 from quad_tree import Point
-# lat, lon
-# y, x
-# Compute lat,lon distance at http://www.movable-type.co.uk/scripts/latlong.html
+from geopy.distance import vincenty
 
 class ProviGridParm:
     def __init__( self
                 , btmLeft = Point(0,0)
                 , topRight = Point(1,1)
-                , latDistKm = 0, lonDistKm = 0
-                , boxKm = 1
-                ):
+                , boxKm = 1):
+        'Note that boxKm represent the largest possible box size due to map projection and corridinate system.'
         self.btmLeft = btmLeft
         self.topRight = topRight
-        self.latDistKm = float(latDistKm)
-        self.lonDistKm = float(lonDistKm)
         self.boxKm = float(boxKm)
+        self.btmRight = Point(x = self.topRight.x, y = self.btmLeft.y)
+        self.latDistKm = vincenty(self.topRight.getTuple()[::-1], self.btmRight.getTuple()[::-1]).km
+        self.lonDistKm = vincenty(self.btmLeft.getTuple()[::-1], self.btmRight.getTuple()[::-1]).km
         self.ReadjustGrid()
 
     def ReadjustGrid(self):
@@ -34,7 +32,7 @@ class ProviGridParm:
         self.topRight.x = self.btmLeft.x + self.lonDist
         self.latBoxSize = self.latDist / self.nLatBox
         self.lonBoxSize = self.lonDist / self.nLonBox
-
+        self.btmRight = Point(self.topRight.x, self.btmLeft.y)
 
 if __name__ == '__main__':
     if(len(sys.argv) < 2):
@@ -44,16 +42,14 @@ if __name__ == '__main__':
     pvGrid = ProviGridParm(
         btmLeft = Point(97.325565, 5.594899)
         , topRight = Point(105.655127, 20.445080)
-        , latDistKm = 1650
-        , lonDistKm = 867
         , boxKm = 10
     )
     print pvGrid.latBoxSize
     print pvGrid.lonBoxSize
     print pvGrid.nLatBox
     print pvGrid.nLonBox
-    print pvGrid.topRight.y
-    print pvGrid.btmLeft.x
+    print pvGrid.topRight.x
+    print pvGrid.btmLeft.y
 
     startiLat = input('Start iLat (default = 0): ')
     startiLon = input('Start iLon (default = 0): ')
@@ -65,6 +61,6 @@ if __name__ == '__main__':
 
             lat = pvGrid.topRight.y - (iLat+0.5) * pvGrid.latBoxSize
             lon = pvGrid.btmLeft.x + (iLon+0.5) * pvGrid.lonBoxSize
-            province = FindProvByLatLong(lat, lon)
-            proviGridWriter.writerow([iLat, iLon, province])
+            province = GeoFinder.FindCountryAndProvinceByLatLon_Real(lat, lon)[1]
+            # proviGridWriter.writerow([iLat, iLon, province])
             print 'iLat: '+str(iLat)+', iLon: '+str(iLon)+' '+province

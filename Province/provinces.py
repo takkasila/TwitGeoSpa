@@ -1,5 +1,4 @@
 import csv
-import re
 
 def ReadProvinceCSV(provinceCsvFile):
     provinces = []

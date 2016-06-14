@@ -35,8 +35,6 @@ if __name__ == '__main__':
     pvGridParm = ProviGridParm(
         btmLeft = Point(97.325565, 5.594899)
         , topRight = Point(105.655127, 20.445080)
-        , latDistKm = 1650
-        , lonDistKm = 867
         , boxKm = 10
     )
 
