@@ -1,6 +1,7 @@
 *.pyc
 *.gz
-test.py
+*test*.py
 Keys.txt
 all.csv
 AllTwitData.csv
+*.~lock.*

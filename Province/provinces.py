@@ -1,4 +1,5 @@
 import csv
+import re
 
 def ReadProvinceCSV(provinceCsvFile):
     provinces = []
@@ -18,7 +19,12 @@ def SyncProvinceName(province):
     if('Chang Wat' in province):
         province = province[len('Chang Wat '): len(province)]
 
-    if(province == 'Krung Thep Maha Nakhon'):
+    # Cut off bracket word
+    bracketPos = province.find('(')
+    if(bracketPos != -1):
+        province = province[0: bracketPos-1]
+
+    if(province == 'Krung Thep Maha Nakhon' or province == 'Bangkok Metropolis'):
         province = 'Bangkok'
     elif(province == 'Chon Buri'):
         province = 'Chonburi'
@@ -32,9 +38,9 @@ def SyncProvinceName(province):
         province = 'Chonburi'
     elif(province == 'Loei'):
         province = 'Loei Province'
-    elif(province == 'Phang-nga'):
+    elif(province == 'Phang-nga' or province == 'Phangnga'):
         province = 'Phang Nga'
-    elif(province == 'Lopburi'):
+    elif(province == 'Lopburi' or province == 'Lop Buri'):
         province = 'Lopburi Province'
 
     return province
