@@ -26,6 +26,7 @@ def ReadProviGrid(csvFile):
 
 if __name__ == '__main__':
 
+    print 'Deprecate, please use the shapefile version.'
     if(len(sys.argv) < 2):
         print 'Please insert GridProvinces.csv'
         exit()

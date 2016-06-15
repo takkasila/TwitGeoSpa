@@ -3,16 +3,30 @@ import pydot
 import csv
 
 class Point:
-    def __init__(self, x = 0, y = 0, xy = None):
-        if(xy == None):
+    def __init__(self, x = None, y = None, xy = None, value = None):
+        if value != None:
+            self.x = value
+            self.y = value
+        elif xy != None:
+            self.x = float(xy[0])
+            self.y = float(xy[1])
+        elif x != None and y != None:
             self.x = float(x)
             self.y = float(y)
+        elif x != None and y != None and xy != None and value != None:
+            exit(1)
         else:
-            self.x = float(xy.x)
-            self.y = float(xy.y)
+            self.x = 0
+            self.y = 0
 
     def __add__ (self, target):
         return Point(self.x+target.x, self.y+target.y)
+
+    def __sub__ (self, target):
+        return Point(self.x - target.x, self.y - target.y)
+
+    def __str__(self):
+        return '({} {})'.format(self.x, self.y)
 
     def getTuple(self):
         return (self.x, self.y)
@@ -111,10 +125,20 @@ class QuadTree:
         if(self.rect.isInside(point)):
             if(len(self.childs) == 0):
                 self.value = value
-
             else:
                 for child in self.childs:
                     child.SetValue(point, value)
+
+    def AppendValue(self, point, value):
+        if(self.rect.isInside(point)):
+            if(len(self.childs) == 0):
+                if isinstance(self.value, list):
+                    self.value.append(value)
+                else:
+                    self.value = value
+            else:
+                for child in self.childs:
+                    child.AppendValue(point, value)
 
     def findValue(self, point):
         if(self.rect.isInside(point)):

@@ -17,9 +17,9 @@ class ProviGridParm:
         self.btmRight = Point(x = self.topRight.x, y = self.btmLeft.y)
         self.latDistKm = vincenty(self.topRight.getTuple()[::-1], self.btmRight.getTuple()[::-1]).km
         self.lonDistKm = vincenty(self.btmLeft.getTuple()[::-1], self.btmRight.getTuple()[::-1]).km
-        self.ReadjustGrid()
+        self.__readjustGrid()
 
-    def ReadjustGrid(self):
+    def __readjustGrid(self):
         'Round up total grid and distKm size to match box size.'
         latDist = self.topRight.y - self.btmLeft.y
         lonDist = self.topRight.x - self.btmLeft.x
@@ -33,6 +33,14 @@ class ProviGridParm:
         self.latBoxSize = self.latDist / self.nLatBox
         self.lonBoxSize = self.lonDist / self.nLonBox
         self.btmRight = Point(self.topRight.x, self.btmLeft.y)
+
+    def snapToGrid(self, point):
+        'Return top left corner of snapped grid'
+        diff = point - self.btmLeft
+        diff.x = math.floor(diff.x / self.lonBoxSize) * self.lonBoxSize
+        diff.y = math.ceil(diff.y / self.latBoxSize) * self.latBoxSize
+        return self.btmLeft + diff
+
 
 if __name__ == '__main__':
     if(len(sys.argv) < 2):
