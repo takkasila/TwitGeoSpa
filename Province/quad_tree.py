@@ -3,6 +3,7 @@ import pydot
 from collections import OrderedDict
 import csv
 import operator
+import ast
 
 class Point:
     def __init__(self, x = None, y = None, xy = None, value = None):
@@ -293,12 +294,16 @@ class QuadTree:
         for child in self.childs:
             child.__exportTreeStruct_Edge()
 
-def strToListTuple(value):
-    return value
+def strDictReader(value):
+    if value == 'NULL':
+        return value
+
+    d = ast.literal_eval(value)
+    return OrderedDict(sorted(d.items(), reverse= True)).items()
 
 class QuadTreeImporter:
-    def __init__ (self, csvFile, isTuple = False):
-        self.isTuple = isTuple
+    def __init__ (self, csvFile, isDict = False):
+        self.isDict = isDict
         self.ImportTree(csvFile)
 
     def ImportTree(self, csvFile):
@@ -314,8 +319,8 @@ class QuadTreeImporter:
 
             elif(row[0] == 'node'):
                 value = row[6]
-                if self.isTuple:
-                    value = strToListTuple(value)
+                if self.isDict:
+                    value = strDictReader(value)
                 self.nodes.append(
                     QuadTree(
                         uid_in = int(row[1])
