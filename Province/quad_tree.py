@@ -1,6 +1,8 @@
 import sys
 import pydot
+from collections import OrderedDict
 import csv
+import operator
 
 class Point:
     def __init__(self, x = None, y = None, xy = None, value = None):
@@ -129,16 +131,37 @@ class QuadTree:
                 for child in self.childs:
                     child.SetValue(point, value)
 
-    def AppendValue(self, point, value):
+    def AddDictValue(self, point, value):
+        'Recommend only use dict with key being number'
         if(self.rect.isInside(point)):
             if(len(self.childs) == 0):
-                if isinstance(self.value, list):
-                    self.value.append(value)
+                if isinstance(self.value, dict):
+                    self.value.update(value)
+                    self.value = dict(OrderedDict(sorted(
+                        self.value.items()
+                        , reverse = True
+                        , key = operator.itemgetter(0)
+                        )))
+
+                    # Remove item which have same value but lower key
+                    valueList =  list(set([x for x in self.value.values() if self.value.values().count(x) > 1]))
+
+                    for v in valueList:
+                        keyList = []
+                        for pair in self.value.items():
+                            if pair[1] == v:
+                                keyList.append(pair[0])
+
+                        keyList = sorted(keyList)
+                        del keyList[-1]
+                        for key in keyList:
+                            del self.value[key]
+
                 else:
                     self.value = value
             else:
                 for child in self.childs:
-                    child.AppendValue(point, value)
+                    child.AddDictValue(point, value)
 
     def findValue(self, point):
         if(self.rect.isInside(point)):
@@ -270,10 +293,13 @@ class QuadTree:
         for child in self.childs:
             child.__exportTreeStruct_Edge()
 
+def strToListTuple(value):
+    return value
+
 class QuadTreeImporter:
-    def __init__ (self, csvFile = None):
-        if(csvFile != None):
-            self.ImportTree(csvFile)
+    def __init__ (self, csvFile, isTuple = False):
+        self.isTuple = isTuple
+        self.ImportTree(csvFile)
 
     def ImportTree(self, csvFile):
         'uid, Rect:[(btmX, btmY), (topX, topY)], value'
@@ -287,6 +313,9 @@ class QuadTreeImporter:
                 self.totalNode = int(row[1])
 
             elif(row[0] == 'node'):
+                value = row[6]
+                if self.isTuple:
+                    value = strToListTuple(value)
                 self.nodes.append(
                     QuadTree(
                         uid_in = int(row[1])
@@ -294,7 +323,7 @@ class QuadTreeImporter:
                             btmLeft = Point(float(row[2]), float(row[3]))
                             , topRight = Point(float(row[4]), float(row[5]))
                         )
-                        , value = row[6]
+                        , value = value
                     )
                 )
 

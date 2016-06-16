@@ -7,8 +7,8 @@ from quad_tree import *
 
 GeoCodeAPIKey = 'INSERT YOUR GEOCODE KEY'
 class GeoFinder:
-    def __init__(self, province_qtree_csv):
-        qTreeImporter = QuadTreeImporter(province_qtree_csv)
+    def __init__(self, province_qtree_csv, isTuple = False):
+        qTreeImporter = QuadTreeImporter(province_qtree_csv, isTuple)
         self.provinceQuadTree = qTreeImporter.rootNode
 
     @staticmethod

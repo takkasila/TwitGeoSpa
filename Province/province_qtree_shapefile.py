@@ -123,9 +123,10 @@ if __name__ == '__main__':
                         count += 1
 
                 if count != 0:
-                    pvTree.AppendValue(
+                    pvTree.AddDictValue(
                         point= Point(lon, lat)
-                        , value = (count / float(len(testPoints)), pvShape.name))
+                        , value ={count / float(len(testPoints))
+                            : pvShape.name})
 
     pvTree.OptimizeTree()
 
