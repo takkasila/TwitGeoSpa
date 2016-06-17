@@ -46,7 +46,7 @@ if __name__ == '__main__':
         print 'Please insert processed twitdata .csv and output file name.'
         exit()
 
-    provinceHolder = ProvinceHolder(sys.argv[1])
+    provinceHolder = ProvinceHolder(csvFile = sys.argv[1])
 
     provinceTable = ProvinceTable(provinceHolder.provinces)
 

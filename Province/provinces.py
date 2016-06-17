@@ -1,4 +1,5 @@
 import csv
+import time as t
 
 def ReadProvinceCSV(provinceCsvFile):
     provinces = []

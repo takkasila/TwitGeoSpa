@@ -22,7 +22,7 @@ if __name__ == '__main__':
     # Output file
     outputFieldName = ['uid', 'lat', 'lon', 'province', 'province_abbr', 'province_abbr_index', 'epoch', 'date', 'time']
     twitCsvWriter = csv.DictWriter(open(sys.argv[2], 'wb'), delimiter=',', fieldnames= outputFieldName)
-    geoFinder = GeoFinder('./Province/thailand_province_qtree_struct.csv')
+    geoFinder = GeoFinder('./Province/thailand_province_qtree_struct2.csv', isTuple = True)
 
     twitCsvWriter.writeheader()
     isFirstLine = True
@@ -37,6 +37,8 @@ if __name__ == '__main__':
             lat = float(row[1])
             , lon = float(row[0])
         )
+        if province != 'NULL':
+            province = province[0][1]
 
         province = SyncProvinceName(province)
 

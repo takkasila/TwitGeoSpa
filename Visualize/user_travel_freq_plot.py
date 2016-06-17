@@ -59,7 +59,7 @@ if __name__ == '__main__':
     plt.plot(provinceFreq, 'ro', provinceFreq, 'b-')
     plt.xlabel('Number of provinces')
     plt.ylabel('Number of user')
-    plt.title('Provinces per user')
+    plt.title('Living provinces per user')
     plt.show()
 
     # --------------------------------
