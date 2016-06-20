@@ -275,13 +275,15 @@ class QuadTree:
         self.__exportTreeStruct_Edge()
 
     def __exportTreeStruct_Node(self):
-        'uid, Rect:[(btmX, btmY), (topX, topY)], value'
+        'uid, Rect:[(btmX, btmY), (topX, topY)], value, level, isLeafNode'
         QuadTree.treeCsvWriter.writerow([
             'node'
             , self.uid
             , self.rect.btmLeft.x, self.rect.btmLeft.y
             , self.rect.topRight.x, self.rect.topRight.y
             , self.value
+            , self.level
+            , len(self.childs) == 0
         ])
         for child in self.childs:
             child.__exportTreeStruct_Node()
