@@ -92,20 +92,7 @@ def buildProvinceShape(shapeFile):
                 )
     return pvShapes
 
-if __name__ == '__main__':
-
-    if(len(sys.argv) < 4):
-        print 'Please insert province shapefile and export file names'
-        exit()
-
-    sf = shapefile.Reader(sys.argv[1])
-    pvGrid, pvTree = buildGridAndTree(sf, boxKm = 5)
-    pvTree.Span()
-    pvShapes = buildProvinceShape(sf)
-
-    # ----------------------------------
-    # Step 3: Scan grid
-
+def scanGrid(pvGrid, pvTree, pvShapes):
     for pvShape in pvShapes.values():
         print pvShape.name
 
@@ -138,6 +125,19 @@ if __name__ == '__main__':
                             : pvShape.name})
 
     pvTree.OptimizeTree()
+
+if __name__ == '__main__':
+
+    if(len(sys.argv) < 4):
+        print 'Please insert province shapefile and export file names'
+        exit()
+
+    sf = shapefile.Reader(sys.argv[1])
+    pvGrid, pvTree = buildGridAndTree(sf, boxKm = 50)
+    pvTree.Span()
+    pvShapes = buildProvinceShape(sf)
+
+    scanGrid(pvGrid, pvTree, pvShapes)
 
     # Write out
     pvTree.WriteBoxCSVStart(csvFileName = sys.argv[2])

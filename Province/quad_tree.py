@@ -85,7 +85,7 @@ class QuadTree:
             self.uid = uid_in
 
     def createSubQTree(self):
-        if(self.level == self.maxLevel or len(self.childs) != 0):
+        if(self.level >= self.maxLevel or len(self.childs) != 0):
             return
 
         else:
@@ -280,8 +280,8 @@ class QuadTree:
         for child in self.childs:
             child.__WriteBoxCSV()
 
-    def exportTreeStructStart(self, csvFileName):
-        QuadTree.treeCsvWriter = csv.writer(open(csvFileName, 'wb'), delimiter = ' ')
+    def exportTreeStructStart(self, csvFileName, mode = 'wb'):
+        QuadTree.treeCsvWriter = csv.writer(open(csvFileName, mode), delimiter = ' ')
         self.__exportTreeStruct_Node()
         self.__exportTreeStruct_Edge()
 
@@ -306,6 +306,7 @@ class QuadTree:
 
         for child in self.childs:
             child.__exportTreeStruct_Edge()
+
 
 def strDictReader(value):
     if value == 'NULL':
