@@ -10,10 +10,22 @@ import numpy as np
 
 def genSamplingPoints(startPoint, diff):
     return [startPoint
+            # Inner round
             , startPoint + diff
             , Point(startPoint.x - diff.x, startPoint.y + diff.y)
             , startPoint - diff
-            , Point(startPoint.x + diff.x, startPoint.y - diff.y)]
+            , Point(startPoint.x + diff.x, startPoint.y - diff.y)
+            # Border corner
+            , startPoint + diff*2
+            , Point(startPoint.x - diff.x*2, startPoint.y + diff.y*2)
+            , startPoint - diff*2
+            , Point(startPoint.x + diff.x*2, startPoint.y - diff.y*2)
+            # Border middle
+            , Point(startPoint.x, startPoint.y + diff.y*2)
+            , Point(startPoint.x, startPoint.y - diff.y*2)
+            , Point(startPoint.x + diff.x*2, startPoint.y)
+            , Point(startPoint.x - diff.x*2, startPoint.y)
+            ]
 
 class ProvinceShape:
     def __init__(self, name, pathPoints):
@@ -33,67 +45,63 @@ class ProvinceShape:
             if self.bbMax.y < y:
                 self.bbMax.y = y
 
-if __name__ == '__main__':
-
-    # ----------------------------------
-    # Step 1: Building grid and tree
-    if(len(sys.argv) < 4):
-        print 'Please insert province shapefile and export file names'
-        exit()
-
-    sf = shapefile.Reader(sys.argv[1])
+def buildGridAndTree(shapeFile, boxKm = 10):
 
     overAllBBox = Rectangle(
-        btmLeft = Point(sf.bbox[0], sf.bbox[1])
-        , topRight = Point(sf.bbox[2], sf.bbox[3])
+        btmLeft = Point(shapeFile.bbox[0], shapeFile.bbox[1])
+        , topRight = Point(shapeFile.bbox[2], shapeFile.bbox[3])
     )
+    midPoint = (overAllBBox.btmLeft + overAllBBox.topRight) / 2
+
+    if overAllBBox.getWidth() > overAllBBox.getHeight():
+        mainSideWidth = overAllBBox.getWidth()
+    else:
+        mainSideWidth = overAllBBox.getHeight()
+
+    mainHalfWidth = Point(value = mainSideWidth/2)
 
     pvGrid = ProviGridParm(
-        btmLeft = overAllBBox.btmLeft
-        , topRight = overAllBBox.topRight
-        , boxKm = 2
+        btmLeft = midPoint - mainHalfWidth
+        , topRight = midPoint + mainHalfWidth
+        , boxKm = boxKm
     )
 
-    midPoint = Point(
-        x = (pvGrid.topRight.x  + pvGrid.btmLeft.x)/2
-        , y = (pvGrid.topRight.y  + pvGrid.btmLeft.y)/2
-    )
-
-    # Round up number of grid to power of 2
-    nBox = max(pvGrid.nLatBox, pvGrid.nLonBox)
-    maxLevel = int(ceil(log(nBox)/log(2)))
-    nBox = int(pow(2, maxLevel))
-    nBoxH = nBox / 2
-
-    print 'Maxlevel: '+str(maxLevel)
+    print 'Maxlevel: '+str(pvGrid.maxLevel)
 
     pvTree = QuadTree(
         level = 0
         , rect = Rectangle(
-            btmLeft = Point(
-                midPoint.x - nBoxH * pvGrid.lonBoxSize
-                , midPoint.y - nBoxH * pvGrid.latBoxSize)
-            , topRight = Point(
-                midPoint.x + nBoxH * pvGrid.lonBoxSize
-                , midPoint.y + nBoxH * pvGrid.latBoxSize)
+            btmLeft = pvGrid.btmLeft
+            , topRight = pvGrid.topRight
         )
-        , maxLevel = maxLevel
+        , maxLevel = pvGrid.maxLevel
     )
-    pvTree.Span()
 
-    # ----------------------------------
-    # Step 2: Create shape of provinces
+    return (pvGrid, pvTree)
 
-    pvPaths = sf.shapes()
-    records = sf.records()
+def buildProvinceShape(shapeFile):
+    pvPaths = shapeFile.shapes()
+    records = shapeFile.records()
     pvShapes = {}
     for i in range(len(records)):
-        name = SyncProvinceName(records[i][4])
+        name = SyncProvinceName(records[i][2])
         if name not in pvShapes.keys():
             pvShapes[name] = ProvinceShape(
                     name = name
                     , pathPoints = pvPaths[i].points
                 )
+    return pvShapes
+
+if __name__ == '__main__':
+
+    if(len(sys.argv) < 4):
+        print 'Please insert province shapefile and export file names'
+        exit()
+
+    sf = shapefile.Reader(sys.argv[1])
+    pvGrid, pvTree = buildGridAndTree(sf, boxKm = 5)
+    pvTree.Span()
+    pvShapes = buildProvinceShape(sf)
 
     # ----------------------------------
     # Step 3: Scan grid
@@ -107,6 +115,7 @@ if __name__ == '__main__':
         )
         topRight = pvGrid.snapToGrid(pvShape.bbMax)
         btmLeft = pvGrid.snapToGrid(pvShape.bbMin)
+
         # Get number of grid in lat lon
         nLonBox = int((topRight.x - topLeft.x) / pvGrid.lonBoxSize)
         nLatBox = int((topLeft.y - btmLeft.y) / pvGrid.latBoxSize)
@@ -130,5 +139,6 @@ if __name__ == '__main__':
 
     pvTree.OptimizeTree()
 
-    pvTree.WriteBoxCSVStart(csvFileName= sys.argv[2])
-    pvTree.exportTreeStructStart(csvFileName= sys.argv[3])
+    # Write out
+    pvTree.WriteBoxCSVStart(csvFileName = sys.argv[2])
+    pvTree.exportTreeStructStart(csvFileName = sys.argv[3])

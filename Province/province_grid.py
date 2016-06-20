@@ -15,24 +15,28 @@ class ProviGridParm:
         self.topRight = topRight
         self.boxKm = float(boxKm)
         self.btmRight = Point(x = self.topRight.x, y = self.btmLeft.y)
-        self.latDistKm = vincenty(self.topRight.getTuple()[::-1], self.btmRight.getTuple()[::-1]).km
-        self.lonDistKm = vincenty(self.btmLeft.getTuple()[::-1], self.btmRight.getTuple()[::-1]).km
         self.__readjustGrid()
 
     def __readjustGrid(self):
         'Round up total grid and distKm size to match box size.'
-        latDist = self.topRight.y - self.btmLeft.y
-        lonDist = self.topRight.x - self.btmLeft.x
-        self.nLatBox = int(math.ceil(self.latDistKm/self.boxKm))
-        self.nLonBox = int(math.ceil(self.lonDistKm/self.boxKm))
-        self.latDist = (latDist/self.latDistKm) * self.nLatBox * self.boxKm
-        self.lonDist = (lonDist/self.lonDistKm) * self.nLonBox * self.boxKm
+        self.latDistKm = vincenty(self.topRight.getTuple()[::-1], self.btmRight.getTuple()[::-1]).km
+        self.lonDistKm = vincenty(self.btmLeft.getTuple()[::-1], self.btmRight.getTuple()[::-1]).km
+        self.latDist = self.topRight.y - self.btmLeft.y
+        self.lonDist = self.topRight.x - self.btmLeft.x
+
+        if self.latDistKm > self.lonDistKm:
+            # Focus maxLevel on lat
+            self.maxLevel = int(math.ceil(math.log(self.latDistKm/self.boxKm, 2)))
+
+        else:
+            # Focus maxLevel on lon
+            self.maxLevel = int(math.ceil(math.log(self.lonDistKm/ self.boxKm, 2)))
+
+        self.nSideBox = int(math.pow(2, self.maxLevel))
+
         #  Stretch in -y, +x
-        self.btmLeft.y = self.topRight.y - self.latDist
-        self.topRight.x = self.btmLeft.x + self.lonDist
-        self.latBoxSize = self.latDist / self.nLatBox
-        self.lonBoxSize = self.lonDist / self.nLonBox
-        self.btmRight = Point(self.topRight.x, self.btmLeft.y)
+        self.latBoxSize = self.latDist / self.nSideBox
+        self.lonBoxSize = self.lonDist / self.nSideBox
 
     def snapToGrid(self, point):
         'Return top left corner of snapped grid'

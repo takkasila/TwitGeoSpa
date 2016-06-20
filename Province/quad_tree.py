@@ -31,6 +31,12 @@ class Point:
     def __str__(self):
         return '({} {})'.format(self.x, self.y)
 
+    def __mul__(self, target):
+        return Point(self.x * target, self.y * target)
+
+    def __div__(self, target):
+        return Point(self.x/target, self.y/target)
+
     def getTuple(self):
         return (self.x, self.y)
 
@@ -49,6 +55,12 @@ class Rectangle:
         if(point.y < self.btmLeft.y or point.y > self.topRight.y):
             return False
         return True
+
+    def getWidth(self):
+        return self.topRight.x - self.btmLeft.x
+
+    def getHeight(self):
+        return self.topRight.y - self.btmLeft.y
 
 uid = 0
 class QuadTree:
@@ -270,7 +282,6 @@ class QuadTree:
 
     def exportTreeStructStart(self, csvFileName):
         QuadTree.treeCsvWriter = csv.writer(open(csvFileName, 'wb'), delimiter = ' ')
-        QuadTree.treeCsvWriter.writerow(['total_node', uid])
         self.__exportTreeStruct_Node()
         self.__exportTreeStruct_Edge()
 
