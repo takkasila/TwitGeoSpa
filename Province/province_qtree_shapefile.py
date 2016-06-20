@@ -92,7 +92,7 @@ def buildProvinceShape(shapeFile):
                 )
     return pvShapes
 
-def scanGrid(pvGrid, pvTree, pvShapes):
+def scanGridByProvince(pvGrid, pvTree, pvShapes):
     for pvShape in pvShapes.values():
         print pvShape.name
 
@@ -137,7 +137,7 @@ if __name__ == '__main__':
     pvTree.Span()
     pvShapes = buildProvinceShape(sf)
 
-    scanGrid(pvGrid, pvTree, pvShapes)
+    scanGridByProvince(pvGrid, pvTree, pvShapes)
 
     # Write out
     pvTree.WriteBoxCSVStart(csvFileName = sys.argv[2])

@@ -40,6 +40,9 @@ class Point:
     def getTuple(self):
         return (self.x, self.y)
 
+    def getList(self):
+        return [self.x, self.y]
+
 class Rectangle:
 
     def __init__(self, btmLeft = Point(0,0), topRight = Point(1,1)):
@@ -280,22 +283,24 @@ class QuadTree:
         for child in self.childs:
             child.__WriteBoxCSV()
 
-    def exportTreeStructStart(self, csvFileName, mode = 'wb'):
+    def exportTreeStructStart(self, csvFileName, mode = 'wb', skipRoot = False):
         QuadTree.treeCsvWriter = csv.writer(open(csvFileName, mode), delimiter = ' ')
-        self.__exportTreeStruct_Node()
+        self.__exportTreeStruct_Node(skipRoot)
         self.__exportTreeStruct_Edge()
 
-    def __exportTreeStruct_Node(self):
-        'uid, Rect:[(btmX, btmY), (topX, topY)], value, level, isLeafNode'
-        QuadTree.treeCsvWriter.writerow([
-            'node'
-            , self.uid
-            , self.rect.btmLeft.x, self.rect.btmLeft.y
-            , self.rect.topRight.x, self.rect.topRight.y
-            , self.value
-            , self.level
-            , len(self.childs) == 0
-        ])
+    def __exportTreeStruct_Node(self, skipRoot = False):
+        if not skipRoot:
+            'uid, Rect:[(btmX, btmY), (topX, topY)], value, level, isLeafNode'
+            QuadTree.treeCsvWriter.writerow([
+                'node'
+                , self.uid
+                , self.rect.btmLeft.x, self.rect.btmLeft.y
+                , self.rect.topRight.x, self.rect.topRight.y
+                , self.value
+                , self.level
+                , len(self.childs) == 0
+            ])
+
         for child in self.childs:
             child.__exportTreeStruct_Node()
 
