@@ -2,7 +2,7 @@ from province_qtree_shapefile import *
 import matplotlib.transforms as mtransforms
 import quad_tree
 
-def Init(treeCsvFileIn, treeCsvFileOut):
+def Init(treeCsvFileIn, treeCsvFileOut, lvlLimit):
     treeCsvReader = csv.reader(open(treeCsvFileIn, 'rb'), delimiter = ' ')
     # Copy from origin file
     treeCsvWriter = csv.writer(open(treeCsvFileOut, 'wb'), delimiter = ' ')
@@ -13,7 +13,7 @@ def Init(treeCsvFileIn, treeCsvFileOut):
         if row[0] == 'node':
             if maxID < int(row[1]):
                 maxID = int(row[1])
-            if row[8] == 'True':
+            if row[8] == 'True' and int(row[7]) > lvlLimit:
                 leafCount += 1
 
 
@@ -69,9 +69,10 @@ if __name__ == '__main__':
         print 'Please insert province shapefile, quadtree struct.csv and output filename.csv'
         exit()
 
-    quad_tree.uid, leafCount = Init(sys.argv[2], sys.argv[3])
     sf = shapefile.Reader(sys.argv[1])
-    pvGrid = buildGridAndTree(sf, boxKm = 25)[0]
+    pvGrid = buildGridAndTree(sf, boxKm = 2)[0] # Desire
+    levelLimit = buildGridAndTree(sf, boxKm = 15)[0] # Limit for performance
+    quad_tree.uid, leafCount = Init(sys.argv[2], sys.argv[3], levelLimit.maxLevel)
     pvShapes = buildProvinceShape(sf)
 
     treeCsvReader = csv.reader(open(sys.argv[2], 'rb'), delimiter = ' ')
@@ -79,7 +80,7 @@ if __name__ == '__main__':
     for row in treeCsvReader:
         if row[0] == 'node':
             # Get leaf node
-            if row[8] == 'True':
+            if row[8] == 'True' and int(row[7]) > levelLimit.maxLevel:
                 value = strDictReader(row[6])
                 qtree = QuadTree(
                     level = int(row[7])
