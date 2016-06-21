@@ -70,8 +70,8 @@ if __name__ == '__main__':
         exit()
 
     sf = shapefile.Reader(sys.argv[1])
-    pvGrid = buildGridAndTree(sf, boxKm = 2)[0] # Desire
-    levelLimit = buildGridAndTree(sf, boxKm = 15)[0] # Limit for performance
+    pvGrid = buildGridAndTree(sf, boxKm = 1)[0] # Desire grid size
+    levelLimit = buildGridAndTree(sf, boxKm = 10)[0] # Limit for performance
     quad_tree.uid, leafCount = Init(sys.argv[2], sys.argv[3], levelLimit.maxLevel)
     pvShapes = buildProvinceShape(sf)
 
