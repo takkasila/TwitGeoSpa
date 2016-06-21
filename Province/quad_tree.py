@@ -65,6 +65,9 @@ class Rectangle:
     def getHeight(self):
         return self.topRight.y - self.btmLeft.y
 
+    def __str__(self):
+        return str([str(self.btmLeft), str(self.topRight)])
+
 uid = 0
 class QuadTree:
     # True : Ouput only leaf grid
@@ -136,8 +139,10 @@ class QuadTree:
     def Span(self):
         'Span tree to maximum depth(level)'
         self.createSubQTree()
+        childCount = len(self.childs)
         for child in self.childs:
-            child.Span()
+            childCount += child.Span()
+        return childCount
 
     def SetValue(self, point, value):
         if(self.rect.isInside(point)):
@@ -205,21 +210,29 @@ class QuadTree:
         for child in self.childs:
             child.PrintTreeUID()
 
-    def resetLevel(self):
-        if(self.parent == None):
+    def resetLevel(self, reset = True):
+        if(self.parent == None and reset == True):
             self.level = 0
 
         for child in self.childs:
             child.level = self.level + 1
             child.resetLevel()
 
-    def resetUID(self):
+    def resetUID(self, reset = True):
         # Check if root node
         global uid
-        if(self.parent == None):
+        if(self.parent == None and reset == True):
             uid = 0
-        self.uid = uid
-        uid += 1
+        if reset == True:
+            self.uid = uid
+            uid += 1
+        for child in self.childs:
+            child.resetUID()
+
+    def injectUID(self, newUID):
+        global uid
+        uid = newUID
+
         for child in self.childs:
             child.resetUID()
 
@@ -227,6 +240,7 @@ class QuadTree:
         if(len(self.childs) == 0):
             return
 
+        global uid
         # Optimize all child node
         for child in self.childs:
             if(len(child.childs) != 0):
@@ -236,7 +250,6 @@ class QuadTree:
         for child in self.childs:
             if(len(child.childs) != 0):
                 return
-
         # Check equal of all childs
         for i in range(1, len(self.childs)):
             if(self.childs[0].value != self.childs[i].value):
@@ -248,10 +261,10 @@ class QuadTree:
             child.parent = None
         self.childs = []
 
-    def OptimizeTree(self):
+    def OptimizeTree(self, reset = True):
         self.GroupChilds()
-        self.resetLevel()
-        self.resetUID()
+        self.resetLevel(reset)
+        self.resetUID(reset)
 
     def ConstructPolyLine(self):
         polyline = 'LINESTRING('

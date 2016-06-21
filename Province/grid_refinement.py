@@ -2,11 +2,14 @@ from province_qtree_shapefile import *
 import matplotlib.transforms as mtransforms
 import quad_tree
 
-def getMaxUID(treeCsvFile):
-    treeCsvReader = csv.reader(open(treeCsvFile, 'rb'), delimiter = ' ')
+def Init(treeCsvFileIn, treeCsvFileOut):
+    treeCsvReader = csv.reader(open(treeCsvFileIn, 'rb'), delimiter = ' ')
+    # Copy from origin file
+    treeCsvWriter = csv.writer(open(treeCsvFileOut, 'wb'), delimiter = ' ')
     maxID = 0
     leafCount = 0
     for row in treeCsvReader:
+        treeCsvWriter.writerow(row)
         if row[0] == 'node':
             if maxID < int(row[1]):
                 maxID = int(row[1])
@@ -17,7 +20,6 @@ def getMaxUID(treeCsvFile):
     return (maxID, leafCount)
 
 def scanGridByCell(pvGrid, pvTree, pvShapes):
-
     # Get QTree BBox
     qTreeBBox = mtransforms.Bbox([
         pvTree.rect.btmLeft.getList()
@@ -33,10 +35,10 @@ def scanGridByCell(pvGrid, pvTree, pvShapes):
         return
 
     # Testing
+    startUID = quad_tree.uid
     pvTree.Span()
-    nLatBox = int((pvTree.rect.topRight.y - pvTree.rect.btmLeft.y) / pvGrid.latBoxSize)
-    nLonBox = int((pvTree.rect.topRight.x - pvTree.rect.btmLeft.x) / pvGrid.lonBoxSize)
-
+    nLatBox = int(ceil((pvTree.rect.topRight.y - pvTree.rect.btmLeft.y) / pvGrid.latBoxSize))
+    nLonBox = int(ceil((pvTree.rect.topRight.x - pvTree.rect.btmLeft.x) / pvGrid.lonBoxSize))
 
     for iLat in range(nLatBox):
         for iLon in range(nLonBox):
@@ -56,18 +58,20 @@ def scanGridByCell(pvGrid, pvTree, pvShapes):
                         , value ={count / float(len(testPoints))
                             : pvShape.name})
 
-    pvTree.OptimizeTree()
-
+    pvTree.OptimizeTree(reset = False)
+    if len(pvTree.childs) == 0:
+        quad_tree.uid = startUID
+    else:
+        pvTree.injectUID(newUID = startUID)
 
 if __name__ == '__main__':
-    if len(sys.argv) < 3:
-        print 'Please insert province shapefile and quadtree struct.csv'
+    if len(sys.argv) < 4:
+        print 'Please insert province shapefile, quadtree struct.csv and output filename.csv'
         exit()
 
-    quad_tree.uid, leafCount = getMaxUID(sys.argv[2])
-    quad_tree.uid += 1
+    quad_tree.uid, leafCount = Init(sys.argv[2], sys.argv[3])
     sf = shapefile.Reader(sys.argv[1])
-    pvGrid, pvTree = buildGridAndTree(sf, boxKm = 2)
+    pvGrid = buildGridAndTree(sf, boxKm = 25)[0]
     pvShapes = buildProvinceShape(sf)
 
     treeCsvReader = csv.reader(open(sys.argv[2], 'rb'), delimiter = ' ')
@@ -84,10 +88,10 @@ if __name__ == '__main__':
                         , topRight = Point(float(row[4]), float(row[5]))
                     )
                     , value = value
-                    , maxLevel = pvTree.maxLevel
+                    , maxLevel = pvGrid.maxLevel
                     , uid_in = int(row[1])
                 )
                 print '{}/{}'.format(lCount, leafCount)
                 scanGridByCell(pvGrid, qtree, pvShapes)
-                qtree.exportTreeStructStart(csvFileName = sys.argv[2], mode = 'a', skipRoot = True)
+                qtree.exportTreeStructStart(csvFileName = sys.argv[3], mode = 'a', skipRoot = True)
                 lCount += 1
