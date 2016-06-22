@@ -2,14 +2,15 @@ from province_qtree_shapefile import *
 import matplotlib.transforms as mtransforms
 import quad_tree
 
-def Init(treeCsvFileIn, treeCsvFileOut, lvlLimit):
+def Init(treeCsvFileIn, treeCsvFileOut, lvlLimit, copy = True):
     treeCsvReader = csv.reader(open(treeCsvFileIn, 'rb'), delimiter = ' ')
     # Copy from origin file
     treeCsvWriter = csv.writer(open(treeCsvFileOut, 'wb'), delimiter = ' ')
     maxID = 0
     leafCount = 0
     for row in treeCsvReader:
-        treeCsvWriter.writerow(row)
+        if copy:
+            treeCsvWriter.writerow(row)
         if row[0] == 'node':
             if maxID < int(row[1]):
                 maxID = int(row[1])
@@ -64,23 +65,27 @@ def scanGridByCell(pvGrid, pvTree, pvShapes):
     else:
         pvTree.injectUID(newUID = startUID)
 
-if __name__ == '__main__':
-    if len(sys.argv) < 4:
-        print 'Please insert province shapefile, quadtree struct.csv and output filename.csv'
-        exit()
+def StartRefine(pvShapeFile, inQTreeStruct, outQTreeStruct, desireGridSizekm, thresholdGridSizekm, workSection = 1, totalSection = 1):
 
-    sf = shapefile.Reader(sys.argv[1])
-    pvGrid = buildGridAndTree(sf, boxKm = 1)[0] # Desire grid size
-    levelLimit = buildGridAndTree(sf, boxKm = 10)[0] # Limit for performance
-    quad_tree.uid, leafCount = Init(sys.argv[2], sys.argv[3], levelLimit.maxLevel)
+    sf = shapefile.Reader(pvShapeFile)
+    pvGrid = buildGridAndTree(sf, boxKm = desireGridSizekm)[0] # Desire grid size
+    levelLimit = buildGridAndTree(sf, boxKm = thresholdGridSzekm)[0] # Limit for performance
+    quad_tree.uid, leafCount = Init(inQTreeStruct, outQTreeStruct, levelLimit.maxLevel, copy = (totalSection == 1))
     pvShapes = buildProvinceShape(sf)
 
-    treeCsvReader = csv.reader(open(sys.argv[2], 'rb'), delimiter = ' ')
+    treeCsvReader = csv.reader(open(inQTreeStruct, 'rb'), delimiter = ' ')
     lCount = 0
+    print '{}/{}'.format(lCount, leafCount)
+    start = int(ceil((workSection-1)/float(totalSection)*leafCount))
+    stop = int(ceil(workSection/float(totalSection)*leafCount))-1
+    print 'start: {}, stop: {}'.format(start, stop)
     for row in treeCsvReader:
         if row[0] == 'node':
             # Get leaf node
             if row[8] == 'True' and int(row[7]) > levelLimit.maxLevel:
+                if lCount < start:
+                    lCount += 1
+                    continue
                 value = strDictReader(row[6])
                 qtree = QuadTree(
                     level = int(row[7])
@@ -94,5 +99,29 @@ if __name__ == '__main__':
                 )
                 print '{}/{}'.format(lCount, leafCount)
                 scanGridByCell(pvGrid, qtree, pvShapes)
-                qtree.exportTreeStructStart(csvFileName = sys.argv[3], mode = 'a', skipRoot = True)
+                qtree.exportTreeStructStart(csvFileName = outQTreeStruct, mode = 'a', skipRoot = True)
                 lCount += 1
+
+
+if __name__ == '__main__':
+    if len(sys.argv) < 4:
+        print 'Please insert province shapefile, quadtree struct.csv and output filename.csv'
+        exit()
+
+    isMultiprocessing = raw_input('Use multiprocessing? (y/n): ').lower()
+    desireGridSizekm = input('Desire grid size(km): ')
+    thresholdGridSizekm = input('Threshold grid size(km): ')
+
+    if isMultiprocessing == 'n':
+        StartRefine(
+            pvShapeFile= sys.argv[1]
+            , inQTreeStruct= sys.argv[2]
+            , outQTreeStruct= sys.argv[3]
+            , desireGridSizekm= desireGridSizekm
+            , thresholdGridSizekm= thresholdGridSizekm
+            , workSection= 1
+            , totalSection= 1
+        )
+
+    elif isMultiprocessing == 'y':
+        print 'Incoming multipro?'
