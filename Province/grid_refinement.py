@@ -2,7 +2,7 @@ from province_qtree_shapefile import *
 import matplotlib.transforms as mtransforms
 import quad_tree
 
-def Init(treeCsvFileIn, treeCsvFileOut, lvlLimit, copy = True):
+def Init(treeCsvFileIn, treeCsvFileOut, copy = True):
     treeCsvReader = csv.reader(open(treeCsvFileIn, 'rb'), delimiter = ' ')
     # Copy from origin file
     treeCsvWriter = csv.writer(open(treeCsvFileOut, 'wb'), delimiter = ' ')
@@ -14,9 +14,8 @@ def Init(treeCsvFileIn, treeCsvFileOut, lvlLimit, copy = True):
         if row[0] == 'node':
             if maxID < int(row[1]):
                 maxID = int(row[1])
-            if row[8] == 'True' and int(row[7]) > lvlLimit:
+            if row[8] == 'True':
                 leafCount += 1
-
 
     return (maxID, leafCount)
 
@@ -65,12 +64,11 @@ def scanGridByCell(pvGrid, pvTree, pvShapes):
     else:
         pvTree.injectUID(newUID = startUID)
 
-def StartRefine(pvShapeFile, inQTreeStruct, outQTreeStruct, desireGridSizekm, thresholdGridSizekm, workSection = 1, totalSection = 1):
+def StartRefine(pvShapeFile, inQTreeStruct, outQTreeStruct, desireGridSizekm, workSection = 1, totalSection = 1):
 
     sf = shapefile.Reader(pvShapeFile)
     pvGrid = buildGridAndTree(sf, boxKm = desireGridSizekm)[0] # Desire grid size
-    levelLimit = buildGridAndTree(sf, boxKm = thresholdGridSzekm)[0] # Limit for performance
-    quad_tree.uid, leafCount = Init(inQTreeStruct, outQTreeStruct, levelLimit.maxLevel, copy = (totalSection == 1))
+    quad_tree.uid, leafCount = Init(inQTreeStruct, outQTreeStruct, copy = (totalSection == 1))
     pvShapes = buildProvinceShape(sf)
 
     treeCsvReader = csv.reader(open(inQTreeStruct, 'rb'), delimiter = ' ')
@@ -79,29 +77,39 @@ def StartRefine(pvShapeFile, inQTreeStruct, outQTreeStruct, desireGridSizekm, th
     start = int(ceil((workSection-1)/float(totalSection)*leafCount))
     stop = int(ceil(workSection/float(totalSection)*leafCount))-1
     print 'start: {}, stop: {}'.format(start, stop)
-    for row in treeCsvReader:
-        if row[0] == 'node':
-            # Get leaf node
-            if row[8] == 'True' and int(row[7]) > levelLimit.maxLevel:
-                if lCount < start:
-                    lCount += 1
-                    continue
-                value = strDictReader(row[6])
-                qtree = QuadTree(
-                    level = int(row[7])
-                    , rect = Rectangle(
-                        btmLeft = Point(float(row[2]), float(row[3]))
-                        , topRight = Point(float(row[4]), float(row[5]))
-                    )
-                    , value = value
-                    , maxLevel = pvGrid.maxLevel
-                    , uid_in = int(row[1])
-                )
-                print '{}/{}'.format(lCount, leafCount)
-                scanGridByCell(pvGrid, qtree, pvShapes)
-                qtree.exportTreeStructStart(csvFileName = outQTreeStruct, mode = 'a', skipRoot = True)
-                lCount += 1
 
+    oriTreeImp = QuadTreeImporter(csvFile= inQTreeStruct, isDict = True)
+    oriQTree = oriTreeImp.rootNode
+
+    for row in treeCsvReader:
+        if row[0] == 'node' and row[8] == 'True':
+            if lCount < start:
+                lCount += 1
+                continue
+
+            print '{}/{}'.format(lCount, leafCount)
+            value = strDictReader(row[6])
+            qtree = QuadTree(
+                level = int(row[7])
+                , rect = Rectangle(
+                    btmLeft = Point(float(row[2]), float(row[3]))
+                    , topRight = Point(float(row[4]), float(row[5]))
+                )
+                , value = value
+                , maxLevel = pvGrid.maxLevel
+                , uid_in = int(row[1])
+            )
+            scanGridByCell(pvGrid, qtree, pvShapes)
+
+            oriNode = oriQTree.findNodeByPoint(qtree.rect.getMidPoint()).parent
+            for i in range(len(oriNode.childs)):
+                if oriNode.childs[i].uid == qtree.uid:
+                    oriNode.childs[i] = qtree
+
+            qtree.exportTreeStructStart(csvFileName = outQTreeStruct, mode = 'a', skipRoot = True)
+            lCount += 1
+
+    print 'Error whole tree:', oriQTree.ErrorCheck()
 
 if __name__ == '__main__':
     if len(sys.argv) < 4:
@@ -110,7 +118,6 @@ if __name__ == '__main__':
 
     isMultiprocessing = raw_input('Use multiprocessing? (y/n): ').lower()
     desireGridSizekm = input('Desire grid size(km): ')
-    thresholdGridSizekm = input('Threshold grid size(km): ')
 
     if isMultiprocessing == 'n':
         StartRefine(
@@ -118,7 +125,6 @@ if __name__ == '__main__':
             , inQTreeStruct= sys.argv[2]
             , outQTreeStruct= sys.argv[3]
             , desireGridSizekm= desireGridSizekm
-            , thresholdGridSizekm= thresholdGridSizekm
             , workSection= 1
             , totalSection= 1
         )

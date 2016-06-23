@@ -133,7 +133,8 @@ if __name__ == '__main__':
         exit()
 
     sf = shapefile.Reader(sys.argv[1])
-    pvGrid, pvTree = buildGridAndTree(sf, boxKm = 25)
+    gridSize = input('Grid size(km): ')
+    pvGrid, pvTree = buildGridAndTree(sf, boxKm = gridSize)
     pvTree.Span()
     pvShapes = buildProvinceShape(sf)
 

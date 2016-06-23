@@ -52,18 +52,27 @@ class Rectangle:
         self.halfHeight = (topRight.y - btmLeft.y)/2
         self.center = Point(x = btmLeft.x + self.halfWidth, y = btmLeft.y + self.halfHeight)
 
-    def isInside(self, point):
+    def isPointInside(self, point):
         if(point.x < self.btmLeft.x or point.x > self.topRight.x):
             return False
         if(point.y < self.btmLeft.y or point.y > self.topRight.y):
             return False
         return True
 
+    def isRectInside(self, rect):
+        if self.isPointInside(rect.btmLeft) and self.isPointInside(rect.topRight):
+            return True
+        else:
+            return False
+
     def getWidth(self):
         return self.topRight.x - self.btmLeft.x
 
     def getHeight(self):
         return self.topRight.y - self.btmLeft.y
+
+    def getMidPoint(self):
+        return (self.btmLeft + self.topRight)/2
 
     def __str__(self):
         return str([str(self.btmLeft), str(self.topRight)])
@@ -145,7 +154,7 @@ class QuadTree:
         return childCount
 
     def SetValue(self, point, value):
-        if(self.rect.isInside(point)):
+        if(self.rect.isPointInside(point)):
             if(len(self.childs) == 0):
                 self.value = value
             else:
@@ -154,7 +163,7 @@ class QuadTree:
 
     def AddDictValue(self, point, value):
         'Recommend only use dict with key being number'
-        if(self.rect.isInside(point)):
+        if(self.rect.isPointInside(point)):
             if(len(self.childs) == 0):
                 if isinstance(self.value, dict):
                     self.value.update(value)
@@ -185,16 +194,35 @@ class QuadTree:
                     child.AddDictValue(point, value)
 
     def findValue(self, point):
-        if(self.rect.isInside(point)):
+        if(self.rect.isPointInside(point)):
             if(len(self.childs) == 0):
-                # May change to value later
-                return self.value
+                    return self.value
             else:
                 for qTree in self.childs:
-                    if(qTree.rect.isInside(point)):
+                    if(qTree.rect.isPointInside(point)):
                         return qTree.findValue(point)
-        else:
-            return 'NULL'
+
+        return 'NULL'
+
+    def findUID(self, target_uid):
+        'Return node which contain asked uid if found'
+        if self.uid == target_uid:
+            return self
+
+        for child in self.childs:
+            x = child.findUID(target_uid)
+            if x != None:
+                return x
+
+    def findNodeByPoint(self, point):
+        if self.rect.isPointInside(point):
+            if len(self.childs) == 0:
+                return self
+            else:
+                for child in self.childs:
+                    x = child.findNodeByPoint(point)
+                    if x != None:
+                        return x
 
     def PrintTreeValue(self):
         for i in range(self.level):
@@ -210,6 +238,17 @@ class QuadTree:
         for child in self.childs:
             child.PrintTreeUID()
 
+        return self
+
+    def PrintTreeRect(self):
+        for i in range(self.level):
+            sys.stdout.write('\t')
+        print self.rect
+        for child in self.childs:
+            child.PrintTreeRect()
+
+        return self
+
     def resetLevel(self, reset = True):
         if(self.parent == None and reset == True):
             self.level = 0
@@ -221,7 +260,7 @@ class QuadTree:
     def resetUID(self, reset = True):
         # Check if root node
         global uid
-        if(self.parent == None and reset == True):
+        if self.parent == None and reset == True:
             uid = 0
         if reset == True:
             self.uid = uid
@@ -265,6 +304,30 @@ class QuadTree:
         self.GroupChilds()
         self.resetLevel(reset)
         self.resetUID(reset)
+
+    def ErrorCheck(self):
+        'Return number of error nodes'
+        count = 0
+        # Check number of childs
+        if len(self.childs) != 0 and len(self.childs) != 4:
+            count += 1
+
+        # Check rectangle of childs
+        for child in self.childs:
+            if not self.rect.isRectInside(child.rect):
+                count += 1
+
+        for child in self.childs:
+            count += child.ErrorCheck()
+
+        return count
+
+    def CountTotalNode(self):
+        count = len(self.childs)
+        for child in self.childs:
+            count += child.CountTotalNode()
+
+        return count
 
     def ConstructPolyLine(self):
         polyline = 'LINESTRING('
@@ -331,7 +394,13 @@ def strDictReader(value):
         return value
 
     d = ast.literal_eval(value)
-    return OrderedDict(sorted(d.items(), reverse= True)).items()
+    try:
+        x = OrderedDict(sorted(d.items(), reverse= True)).items()
+        return x
+    except:
+        print value
+        raise
+        exit()
 
 class QuadTreeImporter:
     def __init__ (self, csvFile, isDict = False):
@@ -371,3 +440,4 @@ class QuadTreeImporter:
 
         self.rootNode = self.nodes[0]
         self.rootNode.OptimizeTree()
+        print 'Imported tree error:', self.rootNode.ErrorCheck()

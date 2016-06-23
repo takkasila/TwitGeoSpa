@@ -10,8 +10,8 @@ from provinces import *
 # uid, lat, lon, province, province_abbr, province_abbr_index, epoch, date, time
 if __name__ == '__main__':
 
-    if(len(sys.argv) < 3):
-        print 'Please insert Input: TwitData.csv and Output filename, recommend: TwitDataProcessed.csv'
+    if(len(sys.argv) < 4):
+        print 'Please insert Input: TwitData.csv, qTreeStruct.csv and Output filename, recommend: TwitDataProcessed.csv'
         exit()
 
     provinces = ReadProvinceCSV('./Province/Province from Wiki Html table to CSV/ThailandProvinces_abbr.csv')
@@ -21,8 +21,8 @@ if __name__ == '__main__':
 
     # Output file
     outputFieldName = ['uid', 'lat', 'lon', 'province', 'province_abbr', 'province_abbr_index', 'epoch', 'date', 'time']
-    twitCsvWriter = csv.DictWriter(open(sys.argv[2], 'wb'), delimiter=',', fieldnames= outputFieldName)
-    geoFinder = GeoFinder('./Province/thailand_province_qtree_struct2.csv', isTuple = True)
+    twitCsvWriter = csv.DictWriter(open(sys.argv[3], 'wb'), delimiter=',', fieldnames= outputFieldName)
+    geoFinder = GeoFinder(province_qtree_csv = sys.argv[2], isTuple = True)
 
     twitCsvWriter.writeheader()
     isFirstLine = True

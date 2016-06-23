@@ -10,7 +10,7 @@ if __name__ == '__main__':
 
     twitCsvReader = csv.reader(open(sys.argv[3], 'rb'), delimiter = ',')
 
-    geoFinder1 = GeoFinder(sys.argv[1])
+    geoFinder1 = GeoFinder(sys.argv[1], isTuple = True)
     geoFinder2 = GeoFinder(sys.argv[2], isTuple = True)
 
     firstLine = True
@@ -25,6 +25,9 @@ if __name__ == '__main__':
 
         res1 = geoFinder1.FindProvinceByLatLon_Estimate(lat = lat, lon = lon)
         res2 = geoFinder2.FindProvinceByLatLon_Estimate(lat = lat, lon = lon)
+        if res1 != 'NULL':
+            res1 = res1[0][1]
+
         if res2 != 'NULL':
             res2 = res2[0][1]
 
