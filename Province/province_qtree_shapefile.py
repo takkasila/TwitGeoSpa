@@ -30,12 +30,23 @@ def genSamplingPoints(startPoint, diff):
 class ProvinceShape:
     def __init__(self, name, pathPoints):
         self.name = name
-        self.path = Path(np.array(pathPoints))
-        self.bbMin = Point(value = float('inf'))
-        self.bbMax = Point(value = -float('inf'))
-        for point in pathPoints:
-            x = point[0]
-            y = point[1]
+
+        shapes = []
+        shapes.append([])
+        shapeCount = 0
+        startPoint = pathPoints[0]
+        shapes[shapeCount].append(startPoint)
+
+        i = 1
+        self.bbMin = Point(startPoint[0], startPoint[1])
+        self.bbMax = Point(startPoint[0], startPoint[1])
+
+        while i < len(pathPoints):
+            shapes[shapeCount].append(pathPoints[i])
+
+            # Set bounding box
+            x = pathPoints[i][0]
+            y = pathPoints[i][1]
             if self.bbMin.x > x:
                 self.bbMin.x = x
             if self.bbMin.y > y:
@@ -44,6 +55,38 @@ class ProvinceShape:
                 self.bbMax.x = x
             if self.bbMax.y < y:
                 self.bbMax.y = y
+
+            # Split shapes
+            if pathPoints[i] == startPoint:
+                shapes.append([])
+                shapeCount += 1
+                i += 1
+                try:
+                    startPoint = pathPoints[i]
+                    shapes[shapeCount].append(startPoint)
+                except:
+                    del shapes[shapeCount]
+                    break
+            i += 1
+
+        # self.path = Path(np.array(pathPoints))
+        self.paths = []
+        for shape in shapes:
+            self.paths.append(Path(np.array(shape)))
+
+    def isContainPoint(self, point):
+        for path in self.paths:
+            if path.contains_point(point):
+                return True
+
+        return False
+
+    def isIntersectBBox(self, bbox):
+        for path in self.paths:
+            if path.intersects_bbox(bbox):
+                return True
+                
+        return False
 
 def buildGridAndTree(shapeFile, boxKm = 10):
 
@@ -116,7 +159,7 @@ def scanGridByProvince(pvGrid, pvTree, pvShapes):
 
                 count = 0
                 for point in testPoints:
-                    if pvShape.path.contains_point(point.getTuple()):
+                    if pvShape.isContainPoint(point.getTuple()):
                         count += 1
 
                 if count != 0:

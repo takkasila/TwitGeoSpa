@@ -28,7 +28,7 @@ def scanGridByCell(pvGrid, pvTree, pvShapes):
 
     pvShapeList = []
     for pvShape in pvShapes.values():
-        if pvShape.path.intersects_bbox(qTreeBBox):
+        if pvShape.isIntersectBBox(qTreeBBox):
             pvShapeList.append(pvShape)
 
     if len(pvShapeList) == 0:
@@ -49,7 +49,7 @@ def scanGridByCell(pvGrid, pvTree, pvShapes):
             for pvShape in pvShapeList:
                 count = 0
                 for point in testPoints:
-                    if pvShape.path.contains_point(point.getTuple()):
+                    if pvShape.isContainPoint(point.getTuple()):
                         count += 1
 
                 if count != 0:
@@ -69,7 +69,7 @@ def StartRefine(pvShapeFile, inQTreeStruct, outQTreeStruct, desireGridSizekm, wo
     sf = shapefile.Reader(pvShapeFile)
     pvGrid = buildGridAndTree(sf, boxKm = desireGridSizekm)[0] # Desire grid size
     quad_tree.uid, leafCount = Init(inQTreeStruct, outQTreeStruct, copy = (totalSection == 1))
-    pvShapes = buildProvinceShape(sf)
+    pvShapes = buildProvinceShape(sf, './Province from Wiki Html table to CSV/ThailandProvinces_abbr.csv')
 
     treeCsvReader = csv.reader(open(inQTreeStruct, 'rb'), delimiter = ' ')
     lCount = 0
