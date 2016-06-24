@@ -14,38 +14,53 @@ def ReadProvinceCSV(provinceCsvFile):
             provinces.append((str(row[0]), str(row[1]), int(row[2])))
     return provinces
 
-def SyncProvinceName(province):
+class ProvinceSyncer:
+    def __init__(self, provinceCsvFile):
+        self.provinces = ReadProvinceCSV(provinceCsvFile)
+        self.lowerLettProvine = []
+        for pv in self.provinces:
+            self.lowerLettProvine.append(pv[0].lower().replace(' ', ''))
 
-    if('Chang Wat' in province):
-        province = province[len('Chang Wat '): len(province)]
+    def SyncProvinceName(self, province):
+        if('Chang Wat' in province):
+            province = province[len('Chang Wat '): len(province)]
 
-    # Cut off bracket word
-    bracketPos = province.find('(')
-    if(bracketPos != -1):
-        province = province[0: bracketPos-1]
+        # Cut off bracket word
+        bracketPos = province.find('(')
+        if(bracketPos != -1):
+            province = province[0: bracketPos-1]
 
-    if(province == 'Krung Thep Maha Nakhon' or province == 'Bangkok Metropolis'):
-        province = 'Bangkok'
-    elif(province == 'Chon Buri'):
-        province = 'Chonburi'
-    elif(province == 'Si Sa Ket'):
-        province = 'Sisaket'
-    elif(province == 'Prachin Buri'):
-        province = 'Prachinburi'
-    elif(province == 'Buri Ram'):
-        province = 'Buriram'
-    elif(province == 'Chon Buri'):
-        province = 'Chonburi'
-    elif(province == 'Loei'):
-        province = 'Loei Province'
-    elif(province == 'Phang-nga' or province == 'Phangnga'):
-        province = 'Phang Nga'
-    elif(province == 'Lopburi' or province == 'Lop Buri'):
-        province = 'Lopburi Province'
-    elif(province == 'BuengKan'):
-        province = 'Bueng Kan'
+        filterPv = province.lower().replace(' ', '')
 
-    return province
+        for i in range(len(self.lowerLettProvine)):
+            if filterPv == self.lowerLettProvine[i]:
+                return self.provinces[i][0]
+
+        if filterPv == 'amnajcharoen':
+            return 'Amnat Charoen'
+        elif filterPv == 'auttaradit':
+            return 'Uttaradit'
+        elif filterPv == 'burirum':
+            return 'Buriram'
+        elif filterPv == 'kampaengphet':
+            return 'Kamphaeng Phet'
+        elif filterPv == 'nakhonprathom':
+            return 'Nakhon Pathom'
+        elif filterPv == 'phranakhonsiayudhya':
+            return 'Phra Nakhon Si Ayutthaya'
+        elif filterPv == 'prachuapkhilikhan':
+            return 'Prachuap Khiri Khan'
+        elif filterPv == 'samutprakarn':
+            return 'Samut Prakan'
+        elif filterPv == 'samutsongkham':
+            return 'Samut Songkhram'
+        elif filterPv == 'srakaeo':
+            return 'Sa Kaeo'
+
+        if(province == 'Krung Thep Maha Nakhon' or province == 'Bangkok Metropolis'):
+            province = 'Bangkok'
+
+        return province
 
 def EpochToDataTime(epoch):
     date = t.strftime('%Y-%m-%d', t.localtime(epoch))

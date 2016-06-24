@@ -1,2 +1,9 @@
 thailand_province_q_box_1km_REFINE.csv filter=lfs diff=lfs merge=lfs -text
 thailand_province_qtree_struct_1km_REFINE.csv filter=lfs diff=lfs merge=lfs -text
+GridProvinces.csv filter=lfs diff=lfs merge=lfs -text
+thailand_province_qtree_box_1km_REFINE_2km.csv filter=lfs diff=lfs merge=lfs -text
+thailand_province_qtree_box_2km.csv filter=lfs diff=lfs merge=lfs -text
+thailand_province_qtree_box_5km.csv filter=lfs diff=lfs merge=lfs -text
+thailand_province_qtree_struct_1km_REFINE_2km.csv filter=lfs diff=lfs merge=lfs -text
+thailand_province_qtree_struct_2km.csv filter=lfs diff=lfs merge=lfs -text
+thailand_province_qtree_struct_5km.csv filter=lfs diff=lfs merge=lfs -text

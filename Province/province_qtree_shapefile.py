@@ -3,7 +3,7 @@ import csv
 from math import *
 from quad_tree import *
 from province_grid import *
-from provinces import SyncProvinceName
+from provinces import ProvinceSyncer
 import shapefile
 from matplotlib.path import Path
 import numpy as np
@@ -79,12 +79,13 @@ def buildGridAndTree(shapeFile, boxKm = 10):
 
     return (pvGrid, pvTree)
 
-def buildProvinceShape(shapeFile):
+def buildProvinceShape(shapeFile, provinceAbbrCsv):
     pvPaths = shapeFile.shapes()
     records = shapeFile.records()
     pvShapes = {}
+    pvSyncer = ProvinceSyncer(provinceAbbrCsv)
     for i in range(len(records)):
-        name = SyncProvinceName(records[i][2])
+        name = pvSyncer.SyncProvinceName(records[i][2])
         if name not in pvShapes.keys():
             pvShapes[name] = ProvinceShape(
                     name = name
@@ -136,7 +137,7 @@ if __name__ == '__main__':
     gridSize = input('Grid size(km): ')
     pvGrid, pvTree = buildGridAndTree(sf, boxKm = gridSize)
     pvTree.Span()
-    pvShapes = buildProvinceShape(sf)
+    pvShapes = buildProvinceShape(sf, './Province from Wiki Html table to CSV/ThailandProvinces_abbr.csv')
 
     scanGridByProvince(pvGrid, pvTree, pvShapes)
 

@@ -15,6 +15,7 @@ if __name__ == '__main__':
         exit()
 
     provinces = ReadProvinceCSV('./Province/Province from Wiki Html table to CSV/ThailandProvinces_abbr.csv')
+    pvNameSyncer = ProvinceSyncer('./Province/Province from Wiki Html table to CSV/ThailandProvinces_abbr.csv')
 
     # Read file and save as csv (lat, long, epoch, uid, province_name, abbr, province_index)
     twitCsvReader = csv.reader(open(sys.argv[1], 'rb'), delimiter=',')
@@ -28,6 +29,7 @@ if __name__ == '__main__':
     isFirstLine = True
     nullProvinceMap_origin = []
     nullProvinceMap_target = []
+
     for row in twitCsvReader :
         if(isFirstLine):
             isFirstLine = False
@@ -40,7 +42,7 @@ if __name__ == '__main__':
         if province != 'NULL':
             province = province[0][1]
 
-        province = SyncProvinceName(province)
+        province = pvNameSyncer.SyncProvinceName(province)
 
         # Find province Abbr, Index
         abbr = 'NULL'
