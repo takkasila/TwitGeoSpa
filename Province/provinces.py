@@ -22,6 +22,7 @@ class ProvinceSyncer:
             self.lowerLettProvine.append(pv[0].lower().replace(' ', ''))
 
     def SyncProvinceName(self, province):
+        # Cut off 'Chang Wat'
         if('Chang Wat' in province):
             province = province[len('Chang Wat '): len(province)]
 
@@ -29,6 +30,8 @@ class ProvinceSyncer:
         bracketPos = province.find('(')
         if(bracketPos != -1):
             province = province[0: bracketPos-1]
+
+        # Cut off 'Province'
 
         filterPv = province.lower().replace(' ', '')
 
@@ -44,6 +47,10 @@ class ProvinceSyncer:
             return 'Buriram'
         elif filterPv == 'kampaengphet':
             return 'Kamphaeng Phet'
+        elif filterPv == 'loei':
+            return 'Loei Province'
+        elif filterPv == 'lopburi':
+            return 'Lopburi Province'
         elif filterPv == 'nakhonprathom':
             return 'Nakhon Pathom'
         elif filterPv == 'phranakhonsiayudhya':
