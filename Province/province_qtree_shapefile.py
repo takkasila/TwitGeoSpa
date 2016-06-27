@@ -41,6 +41,8 @@ class ProvinceShape:
         self.bbMin = Point(startPoint[0], startPoint[1])
         self.bbMax = Point(startPoint[0], startPoint[1])
 
+        pointSum = Point(value = 0)
+
         while i < len(pathPoints):
             shapes[shapeCount].append(pathPoints[i])
 
@@ -55,6 +57,9 @@ class ProvinceShape:
                 self.bbMax.x = x
             if self.bbMax.y < y:
                 self.bbMax.y = y
+
+            pointSum.x += x
+            pointSum.y += y
 
             # Split shapes
             if pathPoints[i] == startPoint:
@@ -74,6 +79,9 @@ class ProvinceShape:
         for shape in shapes:
             self.paths.append(Path(np.array(shape)))
 
+        self.centroid = pointSum / len(pathPoints)
+
+
     def isContainPoint(self, point):
         for path in self.paths:
             if path.contains_point(point):
@@ -85,7 +93,7 @@ class ProvinceShape:
         for path in self.paths:
             if path.intersects_bbox(bbox):
                 return True
-                
+
         return False
 
 def buildGridAndTree(shapeFile, boxKm = 10):
