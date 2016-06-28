@@ -8,7 +8,6 @@ from operator import itemgetter
 
 def readConnectionTable(csvFile):
     'Return 2D dict of province connection table'
-
     tableReader = csv.reader(open(csvFile, 'rb'), delimiter = ',')
     pvList = OrderedDict()
     header = True
@@ -18,7 +17,6 @@ def readConnectionTable(csvFile):
             del row[0]
             for pv in row:
                 pvList[pv] = OrderedDict()
-
         else:
             pvName = row[0]
             del row[0]
@@ -28,7 +26,6 @@ def readConnectionTable(csvFile):
     return pvList
 
 def writeConnectionLink(pvConnTable, pvPointDict, csvFile):
-
     connLineWriter = csv.DictWriter(open(csvFile, 'wb'), delimiter = ';', fieldnames=['from','to','polyline','weight'])
     connLineWriter.writeheader()
     for pvDict in pvConnTable.items():

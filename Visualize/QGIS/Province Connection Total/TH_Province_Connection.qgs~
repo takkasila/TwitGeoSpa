@@ -3,10 +3,10 @@
   <title></title>
   <layer-tree-group expanded="1" checked="Qt::Checked" name="">
     <customproperties/>
-    <layer-tree-layer expanded="1" checked="Qt::Checked" id="thailand_province_connection_normalize_line20160627170446487" name="thailand_province_connection_normalize_line">
+    <layer-tree-layer expanded="1" checked="Qt::Checked" id="thailand_province_connection_line20160627144616977" name="TH_Province_Connection_Total_Line">
       <customproperties/>
     </layer-tree-layer>
-    <layer-tree-layer expanded="1" checked="Qt::Checked" id="provincePoint_avg20160627144453809" name="provincePoint_avg">
+    <layer-tree-layer expanded="1" checked="Qt::Checked" id="provincePoint_avg20160627144453809" name="TH_Province_Point">
       <customproperties/>
     </layer-tree-layer>
     <layer-tree-layer expanded="1" checked="Qt::Checked" id="TH20160627152622190" name="TH">
@@ -17,10 +17,10 @@
   <mapcanvas>
     <units>degrees</units>
     <extent>
-      <xmin>100.45536387135557277</xmin>
-      <ymin>13.00555222467064276</ymin>
-      <xmax>101.24290200690437302</xmax>
-      <ymax>14.53893181847925398</ymax>
+      <xmin>96.92229796247096374</xmin>
+      <ymin>10.0908866479481496</ymin>
+      <xmax>103.45010867966533397</xmax>
+      <ymax>22.80088924231957392</ymax>
     </extent>
     <rotation>0</rotation>
     <projections>0</projections>
@@ -42,17 +42,17 @@
   <layer-tree-canvas>
     <custom-order enabled="0">
       <item>provincePoint_avg20160627144453809</item>
+      <item>thailand_province_connection_line20160627144616977</item>
       <item>TH20160627152622190</item>
-      <item>thailand_province_connection_normalize_line20160627170446487</item>
     </custom-order>
   </layer-tree-canvas>
   <legend updateDrawingOrder="true">
-    <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="thailand_province_connection_normalize_line" showFeatureCount="0">
+    <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="TH_Province_Connection_Total_Line" showFeatureCount="0">
       <filegroup open="true" hidden="false">
-        <legendlayerfile isInOverview="0" layerid="thailand_province_connection_normalize_line20160627170446487" visible="1"/>
+        <legendlayerfile isInOverview="0" layerid="thailand_province_connection_line20160627144616977" visible="1"/>
       </filegroup>
     </legendlayer>
-    <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="provincePoint_avg" showFeatureCount="0">
+    <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="TH_Province_Point" showFeatureCount="0">
       <filegroup open="true" hidden="false">
         <legendlayerfile isInOverview="0" layerid="provincePoint_avg20160627144453809" visible="1"/>
       </filegroup>
@@ -351,14 +351,14 @@ def my_form_open(dialog, layer, feature):
     </maplayer>
     <maplayer minimumScale="-4.65661e-10" maximumScale="1e+08" simplifyDrawingHints="0" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Point" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
       <id>provincePoint_avg20160627144453809</id>
-      <datasource>file:../../provincePoint_avg.csv?type=csv&amp;delimiter=,;&amp;xField=lon&amp;yField=lat&amp;spatialIndex=no&amp;subsetIndex=no&amp;watchFile=no</datasource>
+      <datasource>file:../../TH_Province_Point.csv?type=csv&amp;delimiter=,;&amp;xField=lon&amp;yField=lat&amp;spatialIndex=no&amp;subsetIndex=no&amp;watchFile=no</datasource>
       <shortname>provincePoint_avg</shortname>
       <title></title>
       <abstract></abstract>
       <keywordList>
         <value></value>
       </keywordList>
-      <layername>provincePoint_avg</layername>
+      <layername>TH_Province_Point</layername>
       <srs>
         <spatialrefsys>
           <proj4>+proj=longlat +datum=WGS84 +no_defs</proj4>
@@ -631,16 +631,16 @@ def my_form_open(dialog, layer, feature):
         <fieldstyles/>
       </conditionalstyles>
     </maplayer>
-    <maplayer minimumScale="-4.65661e-10" maximumScale="1e+08" simplifyDrawingHints="1" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Line" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
-      <id>thailand_province_connection_normalize_line20160627170446487</id>
-      <datasource>file:../../thailand_province_connection_normalize_line.csv?type=csv&amp;delimiter=;&amp;wktField=polyline&amp;spatialIndex=no&amp;subsetIndex=no&amp;watchFile=no</datasource>
-      <shortname>thailand_province_connection_normalize_line</shortname>
+    <maplayer minimumScale="0" maximumScale="1e+08" simplifyDrawingHints="1" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Line" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
+      <id>thailand_province_connection_line20160627144616977</id>
+      <datasource>file:../../TH_Province_Connection_Total_Line.csv?type=csv&amp;delimiter=;&amp;wktField=polyline&amp;spatialIndex=no&amp;subsetIndex=no&amp;watchFile=no</datasource>
+      <shortname>thailand_province_connection_line</shortname>
       <title></title>
       <abstract></abstract>
       <keywordList>
         <value></value>
       </keywordList>
-      <layername>thailand_province_connection_normalize_line</layername>
+      <layername>TH_Province_Connection_Total_Line</layername>
       <srs>
         <spatialrefsys>
           <proj4>+proj=longlat +datum=WGS84 +no_defs</proj4>
@@ -654,7 +654,7 @@ def my_form_open(dialog, layer, feature):
         </spatialrefsys>
       </srs>
       <provider encoding="System">delimitedtext</provider>
-      <previewExpression></previewExpression>
+      <previewExpression>COALESCE( "from", '&lt;NULL>' )</previewExpression>
       <vectorjoins/>
       <layerDependencies/>
       <expressionfields/>
@@ -674,14 +674,14 @@ def my_form_open(dialog, layer, feature):
       </edittypes>
       <renderer-v2 attr="weight" forceraster="0" symbollevels="1" type="graduatedSymbol" graduatedMethod="GraduatedColor" enableorderby="0">
         <ranges>
-          <range render="true" symbol="0" lower="0.000000000000000" upper="0.001556420233460" label=" 0.0000 - 0.0016 "/>
-          <range render="true" symbol="1" lower="0.001556420233460" upper="0.003045359833310" label=" 0.0016 - 0.0030 "/>
-          <range render="true" symbol="2" lower="0.003045359833310" upper="0.004781420765030" label=" 0.0030 - 0.0048 "/>
-          <range render="true" symbol="3" lower="0.004781420765030" upper="0.006938968616940" label=" 0.0048 - 0.0069 "/>
-          <range render="true" symbol="4" lower="0.006938968616940" upper="0.009657594381040" label=" 0.0069 - 0.0097 "/>
-          <range render="true" symbol="5" lower="0.009657594381040" upper="0.014896684286400" label=" 0.0097 - 0.0149 "/>
-          <range render="true" symbol="6" lower="0.014896684286400" upper="0.028592375366600" label=" 0.0149 - 0.0286 "/>
-          <range render="true" symbol="7" lower="0.028592375366600" upper="0.290687648200000" label=" 0.0286 - 0.2907 "/>
+          <range render="true" symbol="0" lower="0.000000000000000" upper="3.000000000000000" label=" 0.0000 - 3.0000 "/>
+          <range render="true" symbol="1" lower="3.000000000000000" upper="8.000000000000000" label=" 3.0000 - 8.0000 "/>
+          <range render="true" symbol="2" lower="8.000000000000000" upper="15.000000000000000" label=" 8.0000 - 15.0000 "/>
+          <range render="true" symbol="3" lower="15.000000000000000" upper="28.000000000000000" label=" 15.0000 - 28.0000 "/>
+          <range render="true" symbol="4" lower="28.000000000000000" upper="49.000000000000000" label=" 28.0000 - 49.0000 "/>
+          <range render="true" symbol="5" lower="49.000000000000000" upper="93.000000000000000" label=" 49.0000 - 93.0000 "/>
+          <range render="true" symbol="6" lower="93.000000000000000" upper="223.000000000000000" label=" 93.0000 - 223.0000 "/>
+          <range render="true" symbol="7" lower="223.000000000000000" upper="14140.000000000000000" label=" 223.0000 - 14140.0000 "/>
         </ranges>
         <symbols>
           <symbol alpha="1" clip_to_extent="1" type="line" name="0">
@@ -701,21 +701,21 @@ def my_form_open(dialog, layer, feature):
               <prop k="offset_unit" v="MM"/>
               <prop k="use_custom_dash" v="0"/>
               <prop k="width_dd_active" v="1"/>
-              <prop k="width_dd_expression" v="coalesce(scale_linear(&quot;weight&quot;, 0, 0.290688, 0, 3), 0)"/>
+              <prop k="width_dd_expression" v="coalesce(scale_linear(&quot;weight&quot;, 0, 14140, 0, 3), 0)"/>
               <prop k="width_dd_field" v=""/>
               <prop k="width_dd_useexpr" v="1"/>
               <prop k="width_map_unit_scale" v="0,0,0,0,0,0"/>
             </layer>
           </symbol>
           <symbol alpha="1" clip_to_extent="1" type="line" name="1">
-            <layer pass="0" class="SimpleLine" locked="0">
+            <layer pass="1" class="SimpleLine" locked="0">
               <prop k="capstyle" v="square"/>
               <prop k="customdash" v="5;2"/>
               <prop k="customdash_map_unit_scale" v="0,0,0,0,0,0"/>
               <prop k="customdash_unit" v="MM"/>
               <prop k="draw_inside_polygon" v="0"/>
               <prop k="joinstyle" v="bevel"/>
-              <prop k="line_color" v="255,255,0,41"/>
+              <prop k="line_color" v="255,255,0,72"/>
               <prop k="line_style" v="solid"/>
               <prop k="line_width" v="0.26"/>
               <prop k="line_width_unit" v="MM"/>
@@ -724,21 +724,21 @@ def my_form_open(dialog, layer, feature):
               <prop k="offset_unit" v="MM"/>
               <prop k="use_custom_dash" v="0"/>
               <prop k="width_dd_active" v="1"/>
-              <prop k="width_dd_expression" v="coalesce(scale_linear(&quot;weight&quot;, 0, 0.290688, 0, 3), 0)"/>
+              <prop k="width_dd_expression" v="coalesce(scale_linear(&quot;weight&quot;, 0, 14140, 0, 3), 0)"/>
               <prop k="width_dd_field" v=""/>
               <prop k="width_dd_useexpr" v="1"/>
               <prop k="width_map_unit_scale" v="0,0,0,0,0,0"/>
             </layer>
           </symbol>
           <symbol alpha="1" clip_to_extent="1" type="line" name="2">
-            <layer pass="0" class="SimpleLine" locked="0">
+            <layer pass="2" class="SimpleLine" locked="0">
               <prop k="capstyle" v="square"/>
               <prop k="customdash" v="5;2"/>
               <prop k="customdash_map_unit_scale" v="0,0,0,0,0,0"/>
               <prop k="customdash_unit" v="MM"/>
               <prop k="draw_inside_polygon" v="0"/>
               <prop k="joinstyle" v="bevel"/>
-              <prop k="line_color" v="255,255,0,82"/>
+              <prop k="line_color" v="255,255,0,145"/>
               <prop k="line_style" v="solid"/>
               <prop k="line_width" v="0.26"/>
               <prop k="line_width_unit" v="MM"/>
@@ -747,21 +747,21 @@ def my_form_open(dialog, layer, feature):
               <prop k="offset_unit" v="MM"/>
               <prop k="use_custom_dash" v="0"/>
               <prop k="width_dd_active" v="1"/>
-              <prop k="width_dd_expression" v="coalesce(scale_linear(&quot;weight&quot;, 0, 0.290688, 0, 3), 0)"/>
+              <prop k="width_dd_expression" v="coalesce(scale_linear(&quot;weight&quot;, 0, 14140, 0, 3), 0)"/>
               <prop k="width_dd_field" v=""/>
               <prop k="width_dd_useexpr" v="1"/>
               <prop k="width_map_unit_scale" v="0,0,0,0,0,0"/>
             </layer>
           </symbol>
           <symbol alpha="1" clip_to_extent="1" type="line" name="3">
-            <layer pass="0" class="SimpleLine" locked="0">
+            <layer pass="3" class="SimpleLine" locked="0">
               <prop k="capstyle" v="square"/>
               <prop k="customdash" v="5;2"/>
               <prop k="customdash_map_unit_scale" v="0,0,0,0,0,0"/>
               <prop k="customdash_unit" v="MM"/>
               <prop k="draw_inside_polygon" v="0"/>
               <prop k="joinstyle" v="bevel"/>
-              <prop k="line_color" v="255,255,0,123"/>
+              <prop k="line_color" v="255,255,0,218"/>
               <prop k="line_style" v="solid"/>
               <prop k="line_width" v="0.26"/>
               <prop k="line_width_unit" v="MM"/>
@@ -770,21 +770,21 @@ def my_form_open(dialog, layer, feature):
               <prop k="offset_unit" v="MM"/>
               <prop k="use_custom_dash" v="0"/>
               <prop k="width_dd_active" v="1"/>
-              <prop k="width_dd_expression" v="coalesce(scale_linear(&quot;weight&quot;, 0, 0.290688, 0, 3), 0)"/>
+              <prop k="width_dd_expression" v="coalesce(scale_linear(&quot;weight&quot;, 0, 14140, 0, 3), 0)"/>
               <prop k="width_dd_field" v=""/>
               <prop k="width_dd_useexpr" v="1"/>
               <prop k="width_map_unit_scale" v="0,0,0,0,0,0"/>
             </layer>
           </symbol>
           <symbol alpha="1" clip_to_extent="1" type="line" name="4">
-            <layer pass="0" class="SimpleLine" locked="0">
+            <layer pass="4" class="SimpleLine" locked="0">
               <prop k="capstyle" v="square"/>
               <prop k="customdash" v="5;2"/>
               <prop k="customdash_map_unit_scale" v="0,0,0,0,0,0"/>
               <prop k="customdash_unit" v="MM"/>
               <prop k="draw_inside_polygon" v="0"/>
               <prop k="joinstyle" v="bevel"/>
-              <prop k="line_color" v="255,218,0,159"/>
+              <prop k="line_color" v="255,218,0,255"/>
               <prop k="line_style" v="solid"/>
               <prop k="line_width" v="0.26"/>
               <prop k="line_width_unit" v="MM"/>
@@ -793,21 +793,21 @@ def my_form_open(dialog, layer, feature):
               <prop k="offset_unit" v="MM"/>
               <prop k="use_custom_dash" v="0"/>
               <prop k="width_dd_active" v="1"/>
-              <prop k="width_dd_expression" v="coalesce(scale_linear(&quot;weight&quot;, 0, 0.290688, 0, 3), 0)"/>
+              <prop k="width_dd_expression" v="coalesce(scale_linear(&quot;weight&quot;, 0, 14140, 0, 3), 0)"/>
               <prop k="width_dd_field" v=""/>
               <prop k="width_dd_useexpr" v="1"/>
               <prop k="width_map_unit_scale" v="0,0,0,0,0,0"/>
             </layer>
           </symbol>
           <symbol alpha="1" clip_to_extent="1" type="line" name="5">
-            <layer pass="0" class="SimpleLine" locked="0">
+            <layer pass="5" class="SimpleLine" locked="0">
               <prop k="capstyle" v="square"/>
               <prop k="customdash" v="5;2"/>
               <prop k="customdash_map_unit_scale" v="0,0,0,0,0,0"/>
               <prop k="customdash_unit" v="MM"/>
               <prop k="draw_inside_polygon" v="0"/>
               <prop k="joinstyle" v="bevel"/>
-              <prop k="line_color" v="255,145,0,191"/>
+              <prop k="line_color" v="255,145,0,255"/>
               <prop k="line_style" v="solid"/>
               <prop k="line_width" v="0.26"/>
               <prop k="line_width_unit" v="MM"/>
@@ -816,21 +816,21 @@ def my_form_open(dialog, layer, feature):
               <prop k="offset_unit" v="MM"/>
               <prop k="use_custom_dash" v="0"/>
               <prop k="width_dd_active" v="1"/>
-              <prop k="width_dd_expression" v="coalesce(scale_linear(&quot;weight&quot;, 0, 0.290688, 0, 3), 0)"/>
+              <prop k="width_dd_expression" v="coalesce(scale_linear(&quot;weight&quot;, 0, 14140, 0, 3), 0)"/>
               <prop k="width_dd_field" v=""/>
               <prop k="width_dd_useexpr" v="1"/>
               <prop k="width_map_unit_scale" v="0,0,0,0,0,0"/>
             </layer>
           </symbol>
           <symbol alpha="1" clip_to_extent="1" type="line" name="6">
-            <layer pass="0" class="SimpleLine" locked="0">
+            <layer pass="6" class="SimpleLine" locked="0">
               <prop k="capstyle" v="square"/>
               <prop k="customdash" v="5;2"/>
               <prop k="customdash_map_unit_scale" v="0,0,0,0,0,0"/>
               <prop k="customdash_unit" v="MM"/>
               <prop k="draw_inside_polygon" v="0"/>
               <prop k="joinstyle" v="bevel"/>
-              <prop k="line_color" v="255,72,0,223"/>
+              <prop k="line_color" v="255,72,0,255"/>
               <prop k="line_style" v="solid"/>
               <prop k="line_width" v="0.26"/>
               <prop k="line_width_unit" v="MM"/>
@@ -839,14 +839,14 @@ def my_form_open(dialog, layer, feature):
               <prop k="offset_unit" v="MM"/>
               <prop k="use_custom_dash" v="0"/>
               <prop k="width_dd_active" v="1"/>
-              <prop k="width_dd_expression" v="coalesce(scale_linear(&quot;weight&quot;, 0, 0.290688, 0, 3), 0)"/>
+              <prop k="width_dd_expression" v="coalesce(scale_linear(&quot;weight&quot;, 0, 14140, 0, 3), 0)"/>
               <prop k="width_dd_field" v=""/>
               <prop k="width_dd_useexpr" v="1"/>
               <prop k="width_map_unit_scale" v="0,0,0,0,0,0"/>
             </layer>
           </symbol>
           <symbol alpha="1" clip_to_extent="1" type="line" name="7">
-            <layer pass="0" class="SimpleLine" locked="0">
+            <layer pass="7" class="SimpleLine" locked="0">
               <prop k="capstyle" v="square"/>
               <prop k="customdash" v="5;2"/>
               <prop k="customdash_map_unit_scale" v="0,0,0,0,0,0"/>
@@ -862,7 +862,7 @@ def my_form_open(dialog, layer, feature):
               <prop k="offset_unit" v="MM"/>
               <prop k="use_custom_dash" v="0"/>
               <prop k="width_dd_active" v="1"/>
-              <prop k="width_dd_expression" v="coalesce(scale_linear(&quot;weight&quot;, 0, 0.290688, 0, 3), 0)"/>
+              <prop k="width_dd_expression" v="coalesce(scale_linear(&quot;weight&quot;, 0, 14140, 0, 3), 0)"/>
               <prop k="width_dd_field" v=""/>
               <prop k="width_dd_useexpr" v="1"/>
               <prop k="width_map_unit_scale" v="0,0,0,0,0,0"/>
@@ -878,7 +878,7 @@ def my_form_open(dialog, layer, feature):
               <prop k="customdash_unit" v="MM"/>
               <prop k="draw_inside_polygon" v="0"/>
               <prop k="joinstyle" v="bevel"/>
-              <prop k="line_color" v="20,141,79,255"/>
+              <prop k="line_color" v="136,5,101,255"/>
               <prop k="line_style" v="solid"/>
               <prop k="line_width" v="0.26"/>
               <prop k="line_width_unit" v="MM"/>
@@ -887,7 +887,7 @@ def my_form_open(dialog, layer, feature):
               <prop k="offset_unit" v="MM"/>
               <prop k="use_custom_dash" v="0"/>
               <prop k="width_dd_active" v="1"/>
-              <prop k="width_dd_expression" v="coalesce(scale_linear(&quot;weight&quot;, 0, 0.290688, 0, 3), 0)"/>
+              <prop k="width_dd_expression" v="coalesce(scale_linear(&quot;weight&quot;, 0, 14140, 0, 3), 0)"/>
               <prop k="width_dd_field" v=""/>
               <prop k="width_dd_useexpr" v="1"/>
               <prop k="width_map_unit_scale" v="0,0,0,0,0,0"/>
@@ -898,13 +898,13 @@ def my_form_open(dialog, layer, feature):
           <prop k="color1" v="255,255,0,0"/>
           <prop k="color2" v="255,0,0,255"/>
           <prop k="discrete" v="0"/>
-          <prop k="stops" v="0.5;255,255,0,144"/>
+          <prop k="stops" v="0.5;255,255,0,255"/>
         </colorramp>
         <invertedcolorramp value="0"/>
         <mode name="quantile"/>
         <rotation/>
         <sizescale scalemethod="diameter"/>
-        <labelformat format=" %1 - %2 " trimtrailingzeroes="false" decimalplaces="4"/>
+        <labelformat format=" %1 - %2 " trimtrailingzeroes="false" decimalplaces="1"/>
       </renderer-v2>
       <labeling type="simple"/>
       <customproperties>
@@ -1084,7 +1084,7 @@ def my_form_open(dialog, layer, feature):
         <selectedonly on=""/>
       </labelattributes>
       <SingleCategoryDiagramRenderer diagramType="Pie">
-        <DiagramCategory penColor="#000000" labelPlacementMethod="XHeight" penWidth="0" diagramOrientation="Up" minimumSize="0" barWidth="5" penAlpha="255" maxScaleDenominator="1e+08" backgroundColor="#ffffff" transparency="0" width="15" scaleDependency="Area" backgroundAlpha="255" angleOffset="1440" scaleBasedVisibility="0" enabled="0" height="15" sizeType="MM" minScaleDenominator="-4.65661e-10">
+        <DiagramCategory penColor="#000000" labelPlacementMethod="XHeight" penWidth="0" diagramOrientation="Up" minimumSize="0" barWidth="5" penAlpha="255" maxScaleDenominator="1e+08" backgroundColor="#ffffff" transparency="0" width="15" scaleDependency="Area" backgroundAlpha="255" angleOffset="1440" scaleBasedVisibility="0" enabled="0" height="15" sizeType="MM" minScaleDenominator="0">
           <fontProperties description="Ubuntu,11,-1,5,50,0,0,0,0,0" style=""/>
           <attribute field="" color="#000000" label=""/>
         </DiagramCategory>
@@ -1149,10 +1149,12 @@ def my_form_open(dialog, layer, feature):
     <Digitizing>
       <DefaultSnapToleranceUnit type="int">2</DefaultSnapToleranceUnit>
       <LayerSnappingList type="QStringList">
-        <value>TH20160627152622190</value>
         <value>provincePoint_avg20160627144453809</value>
+        <value>thailand_province_connection_line20160627144616977</value>
+        <value>TH20160627152622190</value>
       </LayerSnappingList>
       <LayerSnappingEnabledList type="QStringList">
+        <value>enabled</value>
         <value>enabled</value>
         <value>enabled</value>
       </LayerSnappingEnabledList>
@@ -1161,14 +1163,17 @@ def my_form_open(dialog, layer, feature):
       <LayerSnappingToleranceUnitList type="QStringList">
         <value>2</value>
         <value>2</value>
+        <value>2</value>
       </LayerSnappingToleranceUnitList>
       <LayerSnapToList type="QStringList">
+        <value>to_vertex</value>
         <value>to_vertex</value>
         <value>to_vertex</value>
       </LayerSnapToList>
       <DefaultSnapType type="QString">off</DefaultSnapType>
       <DefaultSnapTolerance type="double">0</DefaultSnapTolerance>
       <LayerSnappingToleranceList type="QStringList">
+        <value>0.000000</value>
         <value>0.000000</value>
         <value>0.000000</value>
       </LayerSnappingToleranceList>
