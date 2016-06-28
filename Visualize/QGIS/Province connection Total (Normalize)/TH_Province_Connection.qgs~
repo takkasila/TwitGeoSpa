@@ -17,10 +17,10 @@
   <mapcanvas>
     <units>degrees</units>
     <extent>
-      <xmin>101.57527978577331851</xmin>
-      <ymin>-0.48053081188864866</ymin>
-      <xmax>113.80106409482877439</xmax>
-      <ymax>23.32373634877203017</ymax>
+      <xmin>97.93233165915403049</xmin>
+      <ymin>6.94807098586738547</ymin>
+      <xmax>103.96333336972564609</xmax>
+      <ymax>18.69075941678568498</ymax>
     </extent>
     <rotation>0</rotation>
     <projections>0</projections>
@@ -631,7 +631,7 @@ def my_form_open(dialog, layer, feature):
         <fieldstyles/>
       </conditionalstyles>
     </maplayer>
-    <maplayer minimumScale="0" maximumScale="1e+08" simplifyDrawingHints="1" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Line" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
+    <maplayer minimumScale="-4.65661e-10" maximumScale="1e+08" simplifyDrawingHints="1" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Line" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
       <id>thailand_province_connection_normalize_line20160627170446487</id>
       <datasource>file:../../thailand_province_connection_normalize_line.csv?type=csv&amp;delimiter=;&amp;wktField=polyline&amp;spatialIndex=no&amp;subsetIndex=no&amp;watchFile=no</datasource>
       <shortname>thailand_province_connection_normalize_line</shortname>
@@ -672,7 +672,7 @@ def my_form_open(dialog, layer, feature):
           <widgetv2config IsMultiline="0" fieldEditable="1" UseHtml="0" labelOnTop="0"/>
         </edittype>
       </edittypes>
-      <renderer-v2 attr="weight" forceraster="0" symbollevels="0" type="graduatedSymbol" graduatedMethod="GraduatedColor" enableorderby="0">
+      <renderer-v2 attr="weight" forceraster="0" symbollevels="1" type="graduatedSymbol" graduatedMethod="GraduatedColor" enableorderby="0">
         <ranges>
           <range render="true" symbol="0" lower="0.000000000000000" upper="0.001556420233460" label=" 0.0000 - 0.0016 "/>
           <range render="true" symbol="1" lower="0.001556420233460" upper="0.003045359833310" label=" 0.0016 - 0.0030 "/>
@@ -715,7 +715,7 @@ def my_form_open(dialog, layer, feature):
               <prop k="customdash_unit" v="MM"/>
               <prop k="draw_inside_polygon" v="0"/>
               <prop k="joinstyle" v="bevel"/>
-              <prop k="line_color" v="255,255,0,72"/>
+              <prop k="line_color" v="255,255,0,41"/>
               <prop k="line_style" v="solid"/>
               <prop k="line_width" v="0.26"/>
               <prop k="line_width_unit" v="MM"/>
@@ -738,7 +738,7 @@ def my_form_open(dialog, layer, feature):
               <prop k="customdash_unit" v="MM"/>
               <prop k="draw_inside_polygon" v="0"/>
               <prop k="joinstyle" v="bevel"/>
-              <prop k="line_color" v="255,255,0,145"/>
+              <prop k="line_color" v="255,255,0,82"/>
               <prop k="line_style" v="solid"/>
               <prop k="line_width" v="0.26"/>
               <prop k="line_width_unit" v="MM"/>
@@ -761,7 +761,7 @@ def my_form_open(dialog, layer, feature):
               <prop k="customdash_unit" v="MM"/>
               <prop k="draw_inside_polygon" v="0"/>
               <prop k="joinstyle" v="bevel"/>
-              <prop k="line_color" v="255,255,0,218"/>
+              <prop k="line_color" v="255,255,0,123"/>
               <prop k="line_style" v="solid"/>
               <prop k="line_width" v="0.26"/>
               <prop k="line_width_unit" v="MM"/>
@@ -784,7 +784,7 @@ def my_form_open(dialog, layer, feature):
               <prop k="customdash_unit" v="MM"/>
               <prop k="draw_inside_polygon" v="0"/>
               <prop k="joinstyle" v="bevel"/>
-              <prop k="line_color" v="255,218,0,255"/>
+              <prop k="line_color" v="255,218,0,159"/>
               <prop k="line_style" v="solid"/>
               <prop k="line_width" v="0.26"/>
               <prop k="line_width_unit" v="MM"/>
@@ -807,7 +807,7 @@ def my_form_open(dialog, layer, feature):
               <prop k="customdash_unit" v="MM"/>
               <prop k="draw_inside_polygon" v="0"/>
               <prop k="joinstyle" v="bevel"/>
-              <prop k="line_color" v="255,145,0,255"/>
+              <prop k="line_color" v="255,145,0,191"/>
               <prop k="line_style" v="solid"/>
               <prop k="line_width" v="0.26"/>
               <prop k="line_width_unit" v="MM"/>
@@ -830,7 +830,7 @@ def my_form_open(dialog, layer, feature):
               <prop k="customdash_unit" v="MM"/>
               <prop k="draw_inside_polygon" v="0"/>
               <prop k="joinstyle" v="bevel"/>
-              <prop k="line_color" v="255,72,0,255"/>
+              <prop k="line_color" v="255,72,0,223"/>
               <prop k="line_style" v="solid"/>
               <prop k="line_width" v="0.26"/>
               <prop k="line_width_unit" v="MM"/>
@@ -898,7 +898,7 @@ def my_form_open(dialog, layer, feature):
           <prop k="color1" v="255,255,0,0"/>
           <prop k="color2" v="255,0,0,255"/>
           <prop k="discrete" v="0"/>
-          <prop k="stops" v="0.5;255,255,0,255"/>
+          <prop k="stops" v="0.5;255,255,0,144"/>
         </colorramp>
         <invertedcolorramp value="0"/>
         <mode name="quantile"/>
@@ -1084,19 +1084,20 @@ def my_form_open(dialog, layer, feature):
         <selectedonly on=""/>
       </labelattributes>
       <SingleCategoryDiagramRenderer diagramType="Pie">
-        <DiagramCategory penColor="#000000" labelPlacementMethod="XHeight" penWidth="0" diagramOrientation="Up" minimumSize="0" barWidth="5" penAlpha="255" maxScaleDenominator="1e+08" backgroundColor="#ffffff" transparency="0" width="15" scaleDependency="Area" backgroundAlpha="255" angleOffset="1440" scaleBasedVisibility="0" enabled="0" height="15" sizeType="MM" minScaleDenominator="0">
+        <DiagramCategory penColor="#000000" labelPlacementMethod="XHeight" penWidth="0" diagramOrientation="Up" minimumSize="0" barWidth="5" penAlpha="255" maxScaleDenominator="1e+08" backgroundColor="#ffffff" transparency="0" width="15" scaleDependency="Area" backgroundAlpha="255" angleOffset="1440" scaleBasedVisibility="0" enabled="0" height="15" sizeType="MM" minScaleDenominator="-4.65661e-10">
           <fontProperties description="Ubuntu,11,-1,5,50,0,0,0,0,0" style=""/>
+          <attribute field="" color="#000000" label=""/>
         </DiagramCategory>
       </SingleCategoryDiagramRenderer>
       <DiagramLayerSettings yPosColumn="-1" linePlacementFlags="10" placement="2" dist="0" xPosColumn="-1" priority="0" obstacle="0" zIndex="0" showAll="1"/>
-      <annotationform></annotationform>
+      <annotationform>.</annotationform>
       <excludeAttributesWMS/>
       <excludeAttributesWFS/>
       <attributeactions/>
-      <editform></editform>
+      <editform>.</editform>
       <editforminit/>
       <editforminitcodesource>0</editforminitcodesource>
-      <editforminitfilepath></editforminitfilepath>
+      <editforminitfilepath>.</editforminitfilepath>
       <editforminitcode><![CDATA[# -*- coding: utf-8 -*-
 """
 QGIS forms can have a Python function that is called when the form is

@@ -4,8 +4,8 @@ from collections import OrderedDict
 
 class HistoryData:
 
-    def __init__(self, province_name, time):
-        self.province_name = province_name
+    def __init__(self, name, time):
+        self.name = name
         self.time = time
 
 class User:
@@ -27,16 +27,16 @@ class User:
         self.mergeHist = {}
         previousName = None
         for hist in self.history.values():
-            if previousName != hist.province_name:
+            if previousName != hist.name:
                 self.mergeHist[hist.time] = hist
-                previousName = hist.province_name
+                previousName = hist.name
         self.mergeHist = OrderedDict(sorted(self.mergeHist.items()))
 
     def getUniqueProvinceHist(self):
         provinceNames = []
         for hist in self.history.values():
-            if (hist.province_name not in provinceNames):
-                provinceNames.append(hist.province_name)
+            if (hist.name not in provinceNames):
+                provinceNames.append(hist.name)
         return provinceNames
 
 class UserTracker:
@@ -45,7 +45,7 @@ class UserTracker:
         self.twitCsvReader = csv.DictReader(open(twitDataCsv))
         self.uidList = {}
 
-        # uid,lat,lon,province,province_abbr,province_abbr_index,epoch,date,time
+        'uid,lat,lon,province,province_abbr,province_abbr_index,epoch,date,time'
         for row in self.twitCsvReader:
             id = int(row['uid'])
             if(id not in self.uidList):
@@ -53,7 +53,7 @@ class UserTracker:
 
             self.uidList[id].addHistory(
                 HistoryData(
-                    province_name = row['province']
+                    name = row['province']
                     , time = int(row['epoch'])
                 )
             )
@@ -70,5 +70,8 @@ if __name__ == '__main__':
 
     userTracker = UserTracker(twitDataCsv= sys.argv[1])
 
-    for user in userTracker.uidList.values():
-        print len(user.history.values())
+    for user in userTracker.uidList.items():
+        if user[0] == 728102909175468032:
+            print user
+            print user[1].history.values()[0].name
+            print len(user[1].history.values())

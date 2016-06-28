@@ -4,13 +4,19 @@ import csv
 import twit_extract_feature
 import pandas
 from provinces import *
+from user_tracker import *
 
 class ProvinceTable:
     def __init__(self, provinces):
         self.provinces = provinces
         self.table = [[0 for x in range(len(provinces))] for y in range(len(provinces))]
         self.table_norm = [[0 for x in range(len(provinces))] for y in range(len(provinces))]
-        self.createTableOfCommonUID()
+
+        self.provinceNameList = []
+        for province in self.provinces:
+            self.provinceNameList.append(province.name)
+
+
 
     def createTableOfCommonUID(self):
         for f1 in range(len(self.provinces)):
@@ -27,10 +33,24 @@ class ProvinceTable:
                     self.table_norm[f1][f2] = 0
                     self.table_norm[f2][f1] = 0
 
-        self.provinceNameList = []
-        for province in self.provinces:
-            self.provinceNameList.append(province.name)
+        self.__tableToDataFrame()
 
+    def createTableOfTwosideConnection(self, userTracker):
+        for user in userTracker.uidList.values():
+            startHist = True
+            preHist = None
+            for hist in user.mergeHist.values():
+                if startHist:
+                    startHist = False
+                    preHist = hist
+                    continue
+
+                self.table[self.provinceNameList.index(preHist.name)][self.provinceNameList.index(hist.name)] += 1
+                preHist = hist
+
+        self.__tableToDataFrame()
+
+    def __tableToDataFrame(self):
         self.dataFrame = pandas.DataFrame(data = self.table, index= self.provinceNameList, columns= self.provinceNameList)
 
         self.dataFrame_norm = pandas.DataFrame(data = self.table_norm, index= self.provinceNameList, columns= self.provinceNameList)
@@ -41,15 +61,30 @@ class ProvinceTable:
     def exportToCSV_NormalizePopulation(self, filename):
         self.dataFrame_norm.to_csv(filename)
 
+def createConnectionTable(dataCsv, outputCsv, side):
+    'Side: 1)Overall or 2)Two-side connection'
+    if side != 1 and side != 2:
+        print 'Please specific side correctly'
+        exit()
+
+    provinceHolder = ProvinceHolder()
+    provinceTable = ProvinceTable(provinceHolder.provinces)
+
+    if side == 1:
+        provinceHolder.readDataFromCsv(csvFile = dataCsv)
+        provinceTable.createTableOfCommonUID()
+        provinceTable.exportToCSV_NormalizePopulation(outputCsv[0:len(outputCsv)-4] +'_norm_population'+outputCsv[len(outputCsv)-4::1])
+
+    elif side == 2:
+        userTracker = UserTracker(twitDataCsv= dataCsv)
+        provinceTable.createTableOfTwosideConnection(userTracker)
+
+    provinceTable.exportToCSV(outputCsv)
+
 if __name__ == '__main__':
     if(len(sys.argv) < 3):
         print 'Please insert processed twitdata .csv and output file name.'
         exit()
 
-    provinceHolder = ProvinceHolder(csvFile = sys.argv[1])
-
-    provinceTable = ProvinceTable(provinceHolder.provinces)
-
-    fileName = sys.argv[2]
-    provinceTable.exportToCSV(fileName)
-    provinceTable.exportToCSV_NormalizePopulation(fileName[0:len(fileName)-4] +'_norm_population'+fileName[len(fileName)-4::1])
+    side = input('Overall(1) or Two-side connection(2): ')
+    createConnectionTable(dataCsv = sys.argv[1], outputCsv = sys.argv[2], side = side)
