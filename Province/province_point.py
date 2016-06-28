@@ -1,7 +1,7 @@
 import sys
 import csv
 import shapefile
-from province_qtree_shapefile import ProvinceShape, buildProvinceShape
+from province_qtree_shapefile import buildProvinceShape
 
 class ProvinceCMPoint:
     def __init__(self, inP, outP, polyCentroid):
@@ -10,8 +10,8 @@ class ProvinceCMPoint:
         self.polyCentroid = polyCentroid
 
 class ProvinceCMPointHolder:
-    def __init__(self, shapeFileCsv):
-        self.pvShapes = buildProvinceShape(shapeFileCsv, './Province from Wiki Html table to CSV/ThailandProvinces_abbr.csv')
+    def __init__(self, shapeFileCsv, abbrCsv = './Province from Wiki Html table to CSV/ThailandProvinces_abbr.csv'):
+        self.pvShapes = buildProvinceShape(shapeFileCsv, abbrCsv)
 
         self.pvcmDict = {}
         for pvShape in self.pvShapes.values():
