@@ -24,11 +24,14 @@ Geospatial analysis and simulation using Twitter data
 
     ```python
     from geo_finder import *
-    geoFinder = GeoFinder('/Province/thailand_province_qtree_struct.csv')
+    geoFinder = GeoFinder(province_qtree_csv = './Province/thailand_province_qtree_struct_500m_REFINE_2km.csv', isTuple = True)
     print geoFinder.FindProvinceByLatLon_Estimate(lat = 13.7563486, lon = 100.4557333)
+    print geoFinder.FindProvinceByLatLon_Estimate(lat = 13.9509, lon = 100.5674)
     ```
     ```
-    Bangkok
+    [(1.0, 'Bangkok')]
+    
+    [(0.46153846153846156, 'Pathum Thani'), (0.3076923076923077, 'Bangkok'), (0.23076923076923078, 'Nonthaburi')]
     ```
 
 - ### Quadtree  
