@@ -24,7 +24,7 @@ def readConnectionTable(csvFile):
 
     return pvList
 
-def writeConnectionLink(pvConnTable, pvcmDict, csvFile):
+def writeConnectionLink(pvConnTable, pvcmDict, csvFile, isTwoWay):
     connLineWriter = csv.DictWriter(open(csvFile, 'wb'), delimiter = ';', fieldnames=['from','to','polyline','weight'])
     connLineWriter.writeheader()
     for pvDict in pvConnTable.items():
@@ -33,32 +33,11 @@ def writeConnectionLink(pvConnTable, pvcmDict, csvFile):
                 'from' : pvDict[0]
                 , 'to' : link[0]
                 , 'weight' : link[1]
-                , 'polyline' : 'LINESTRING('
-                    + str(pvcmDict[pvDict[0]].polyCentroid.x)
-                    + ' ' + str(pvcmDict[pvDict[0]].polyCentroid.y)
-                    + ', '
-                    + str(pvcmDict[link[0]].polyCentroid.x)
-                    + ' ' + str(pvcmDict[link[0]].polyCentroid.y)
-                    +')'
+                , 'polyline' : genPolyLine(pvcmDict[pvDict[0]].outP, pvcmDict[link[0]].inP) if isTwoWay else genPolyLine(pvcmDict[pvDict[0]].polyCentroid, pvcmDict[link[0]].polyCentroid)
             })
 
-def writeTwoWayConnectionLink(pvConnTable, pvcmDict, csvFile):
-    connLineWriter = csv.DictWriter(open(csvFile, 'wb'), delimiter = ';', fieldnames=['from','to','polyline','weight'])
-    connLineWriter.writeheader()
-    for pvDict in pvConnTable.items():
-        for link in pvDict[1].items():
-            connLineWriter.writerow({
-                'from' : pvDict[0]
-                , 'to' : link[0]
-                , 'weight' : link[1]
-                , 'polyline' : 'LINESTRING('
-                    + str(pvcmDict[pvDict[0]].outP.x)
-                    + ' ' + str(pvcmDict[pvDict[0]].outP.y)
-                    + ', '
-                    + str(pvcmDict[link[0]].inP.x)
-                    + ' ' + str(pvcmDict[link[0]].inP.y)
-                    +')'
-            })
+def genPolyLine(p1, p2):
+    return 'LINESTRING(' + str(p1.x) + ' ' + str(p1.y) + ', ' + str(p2.x) + ' ' + str(p2.y) +')'
 
 if __name__ == '__main__':
     if len(sys.argv) < 4:
@@ -66,11 +45,10 @@ if __name__ == '__main__':
         exit()
 
     isTwoWay = raw_input('Is two way connection? (y/n): ').lower()
+    durationFilter = input('Travel duration filter (hours): ')
 
     pvcmHolder = ProvinceCMPointHolder(shapefile.Reader(sys.argv[1]), abbrCsv = '../Province/Province from Wiki Html table to CSV/ThailandProvinces_abbr.csv')
     pvConnTable = readConnectionTable(sys.argv[2])
 
-    if isTwoWay == 'n':
-        writeConnectionLink(pvConnTable, pvcmHolder.pvcmDict, sys.argv[3])
-    else:
-        writeTwoWayConnectionLink(pvConnTable, pvcmHolder.pvcmDict, sys.argv[3])
+    isTwoWay = True if isTwoWay == 'y' else False
+    writeConnectionLink(pvConnTable, pvcmHolder.pvcmDict, sys.argv[3], isTwoWay)
