@@ -45,7 +45,6 @@ if __name__ == '__main__':
         exit()
 
     isTwoWay = raw_input('Is two way connection? (y/n): ').lower()
-    durationFilter = input('Travel duration filter (hours): ')
 
     pvcmHolder = ProvinceCMPointHolder(shapefile.Reader(sys.argv[1]), abbrCsv = '../Province/Province from Wiki Html table to CSV/ThailandProvinces_abbr.csv')
     pvConnTable = readConnectionTable(sys.argv[2])

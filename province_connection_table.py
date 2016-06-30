@@ -7,16 +7,15 @@ from provinces import *
 from user_tracker import *
 
 class ProvinceTable:
-    def __init__(self, provinces):
+    def __init__(self, provinces, timeWindow):
         self.provinces = provinces
         self.table = [[0 for x in range(len(provinces))] for y in range(len(provinces))]
         self.table_norm = [[0 for x in range(len(provinces))] for y in range(len(provinces))]
+        self.timeWindow = timeWindow[0] * (24*60*60) + timeWindow[1] * (60*60)
 
         self.provinceNameList = []
         for province in self.provinces:
             self.provinceNameList.append(province.name)
-
-
 
     def createTableOfCommonUID(self):
         for f1 in range(len(self.provinces)):
@@ -39,13 +38,16 @@ class ProvinceTable:
         for user in userTracker.uidList.values():
             startHist = True
             preHist = None
-            for hist in user.mergeHist.values():
+
+            for hist in user.mergeHist.items():
                 if startHist:
                     startHist = False
                     preHist = hist
                     continue
 
-                self.table[self.provinceNameList.index(preHist.name)][self.provinceNameList.index(hist.name)] += 1
+                if (hist[0] - preHist[0]) <= self.timeWindow:
+                    self.table[self.provinceNameList.index(preHist[1].name)][self.provinceNameList.index(hist[1].name)] += 1
+
                 preHist = hist
 
         self.__tableToDataFrame()
@@ -61,14 +63,14 @@ class ProvinceTable:
     def exportToCSV_NormalizePopulation(self, filename):
         self.dataFrame_norm.to_csv(filename)
 
-def createConnectionTable(dataCsv, outputCsv, side):
+def createConnectionTable(dataCsv, outputCsv, side, timeWindow):
     'Side: 1)Overall or 2)Two-side connection'
     if side != 1 and side != 2:
         print 'Please specific side correctly'
         exit()
 
     provinceHolder = ProvinceHolder()
-    provinceTable = ProvinceTable(provinceHolder.provinces)
+    provinceTable = ProvinceTable(provinceHolder.provinces, timeWindow)
 
     if side == 1:
         provinceHolder.readDataFromCsv(csvFile = dataCsv)
@@ -87,4 +89,7 @@ if __name__ == '__main__':
         exit()
 
     side = input('Overall(1) or Two-side connection(2): ')
-    createConnectionTable(dataCsv = sys.argv[1], outputCsv = sys.argv[2], side = side)
+    print 'Insert travel time window in days and hours.'
+    days = input('Days: ')
+    hours = input('Hours: ')
+    createConnectionTable(dataCsv = sys.argv[1], outputCsv = sys.argv[2], side = side, timeWindow = (days, hours))
