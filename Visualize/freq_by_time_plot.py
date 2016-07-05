@@ -22,10 +22,12 @@ if __name__ == '__main__':
     twitReader.next()
     for twit in twitReader:
         tTime = time.strptime(twit['time'],'%H:%M:%S')
-        hourFreq[tTime.tm_hour] += 1
-
         tDay = time.strptime(twit['date'], '%Y-%m-%d')
-        dayFreq[calendar.weekday(tDay.tm_year, tDay.tm_mon, tDay.tm_mday)] += 1
+        tWeekDay = calendar.weekday(tDay.tm_year, tDay.tm_mon, tDay.tm_mday)
+
+        hourFreq[tTime.tm_hour] += 1
+        hourFreqDays[tWeekDay][tTime.tm_hour] += 1
+        dayFreq[tWeekDay] += 1
 
         tDayTuple = str(tDay.tm_year)+'-'+str(tDay.tm_mon)+'-'+str(tDay.tm_mday)
         if tDayTuple not in everyDayFreq:
@@ -61,24 +63,37 @@ if __name__ == '__main__':
             pass
 
     # Plot tweet freq by day hour
-    plt.plot(hourFreq, 'ro', hourFreq, 'b-')
+    weekDayNames = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun']
+    # Sum all day
+    for i in range(len(hourFreq)):
+        hourFreq[i] /= (delta.days+1)
+    plt.plot(hourFreq, '-', linewidth = 3, label = 'Mean')
+    plt.plot(hourFreq, 'ro')
+    # Seperate by day
+    for f1 in range(len(hourFreqDays)):
+        for f2 in range(len(hourFreqDays[f1])):
+            try:
+                hourFreqDays[f1][f2] /= len(weekDayCount[f1])
+            except:
+                pass
+        plt.plot(hourFreqDays[f1], label = weekDayNames[f1])
+    plt.legend(loc='best')
     plt.xticks(range(24))
     plt.xlabel('Hour during the day')
-    plt.ylabel('Number of tweet')
+    plt.ylabel('Mean number of tweet')
     plt.title('Tweet frequency during the day')
     plt.show()
 
-    exit()
     # Plot tweet freq by day in week
-    plt.plot(dayFreq, 'ro', dayFreq, 'b-')
-    plt.xticks(range(7), ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'])
+    plt.plot(dayFreq, 'b-', dayFreq, 'ro')
+    plt.xticks(range(len(weekDayNames)), weekDayNames)
     plt.xlabel('Day')
     plt.ylabel('Mean number of tweet')
     plt.title('Tweet frequency by day in week')
     plt.show()
 
     # Plot tweet freq in every day of collected data
-    plt.plot(fullEveryDayFreq.values(), 'ro', fullEveryDayFreq.values(), 'b-')
+    plt.plot(fullEveryDayFreq.values(), 'b-', fullEveryDayFreq.values(), 'ro')
     plt.xticks(range(len(fullEveryDayFreq.values())), fullEveryDayFreq.keys(), rotation = 'vertical')
     plt.xlabel('Date')
     plt.ylabel('Number of tweet')

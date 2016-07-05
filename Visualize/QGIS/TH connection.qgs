@@ -15,11 +15,8 @@
         <customproperties/>
       </layer-tree-layer>
     </layer-tree-group>
-    <layer-tree-group expanded="1" checked="Qt::PartiallyChecked" name="TwoWay Connection">
+    <layer-tree-group expanded="1" checked="Qt::Unchecked" name="TwoWay Connection">
       <customproperties/>
-      <layer-tree-layer expanded="1" checked="Qt::Checked" id="TH_Province_Connection_Total_Magnitude_Line20160704111402912" name="All_Magnitude">
-        <customproperties/>
-      </layer-tree-layer>
       <layer-tree-layer expanded="0" checked="Qt::Unchecked" id="TH_Province_Connection_TwoWay_Line20160628154955419" name="All">
         <customproperties/>
       </layer-tree-layer>
@@ -45,8 +42,11 @@
         <customproperties/>
       </layer-tree-layer>
     </layer-tree-group>
-    <layer-tree-group expanded="1" checked="Qt::Unchecked" name="Total connection">
+    <layer-tree-group expanded="1" checked="Qt::PartiallyChecked" name="Total connection">
       <customproperties/>
+      <layer-tree-layer expanded="0" checked="Qt::Checked" id="TH_Province_Connection_Total_Magnitude_Line20160704111402912" name="Magnitude">
+        <customproperties/>
+      </layer-tree-layer>
       <layer-tree-layer expanded="0" checked="Qt::Unchecked" id="TH_Province_Connection_Total_Line20160628121536412" name="General">
         <customproperties/>
       </layer-tree-layer>
@@ -68,10 +68,10 @@
   <mapcanvas>
     <units>meters</units>
     <extent>
-      <xmin>11003775.46210245974361897</xmin>
-      <ymin>1326982.28925456805154681</ymin>
-      <xmax>11578580.71177213080227375</xmax>
-      <ymax>1901787.53892420185729861</ymax>
+      <xmin>10964716.34536269493401051</xmin>
+      <ymin>1455797.228129708673805</ymin>
+      <xmax>11539521.59503220953047276</xmax>
+      <ymax>2030602.47779934294521809</ymax>
     </extent>
     <rotation>0</rotation>
     <projections>1</projections>
@@ -150,12 +150,7 @@
         </filegroup>
       </legendlayer>
     </legendgroup>
-    <legendgroup open="true" checked="Qt::PartiallyChecked" name="TwoWay Connection">
-      <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="All_Magnitude" showFeatureCount="0">
-        <filegroup open="true" hidden="false">
-          <legendlayerfile isInOverview="0" layerid="TH_Province_Connection_Total_Magnitude_Line20160704111402912" visible="1"/>
-        </filegroup>
-      </legendlayer>
+    <legendgroup open="true" checked="Qt::Unchecked" name="TwoWay Connection">
       <legendlayer drawingOrder="-1" open="false" checked="Qt::Unchecked" name="All" showFeatureCount="0">
         <filegroup open="false" hidden="false">
           <legendlayerfile isInOverview="0" layerid="TH_Province_Connection_TwoWay_Line20160628154955419" visible="0"/>
@@ -197,7 +192,12 @@
         </filegroup>
       </legendlayer>
     </legendgroup>
-    <legendgroup open="true" checked="Qt::Unchecked" name="Total connection">
+    <legendgroup open="true" checked="Qt::PartiallyChecked" name="Total connection">
+      <legendlayer drawingOrder="-1" open="false" checked="Qt::Checked" name="Magnitude" showFeatureCount="0">
+        <filegroup open="false" hidden="false">
+          <legendlayerfile isInOverview="0" layerid="TH_Province_Connection_Total_Magnitude_Line20160704111402912" visible="1"/>
+        </filegroup>
+      </legendlayer>
       <legendlayer drawingOrder="-1" open="false" checked="Qt::Unchecked" name="General" showFeatureCount="0">
         <filegroup open="false" hidden="false">
           <legendlayerfile isInOverview="0" layerid="TH_Province_Connection_Total_Line20160628121536412" visible="0"/>
@@ -1070,7 +1070,7 @@ def my_form_open(dialog, layer, feature):
         <fieldstyles/>
       </conditionalstyles>
     </maplayer>
-    <maplayer minimumScale="-4.65661e-10" maximumScale="1e+08" simplifyDrawingHints="1" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Line" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
+    <maplayer minimumScale="0" maximumScale="1e+08" simplifyDrawingHints="1" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Line" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
       <id>TH_Province_Connection_Total_Magnitude_Line20160704111402912</id>
       <datasource>file:../TH_Province_Connection_Total_Magnitude_Line.csv?type=csv&amp;delimiter=;&amp;wktField=polyline&amp;spatialIndex=no&amp;subsetIndex=no&amp;watchFile=no</datasource>
       <shortname>TH_Province_Connection_Total_Magnitude_Line</shortname>
@@ -1079,7 +1079,7 @@ def my_form_open(dialog, layer, feature):
       <keywordList>
         <value></value>
       </keywordList>
-      <layername>All_Magnitude</layername>
+      <layername>Magnitude</layername>
       <srs>
         <spatialrefsys>
           <proj4>+proj=longlat +datum=WGS84 +no_defs</proj4>
@@ -1648,7 +1648,7 @@ def my_form_open(dialog, layer, feature):
         <property key="labeling/fitInPolygonOnly" value="false"/>
         <property key="labeling/fontCapitals" value="0"/>
         <property key="labeling/fontFamily" value="Ubuntu"/>
-        <property key="labeling/fontItalic" value="false"/>
+        <property key="labeling/fontItalic" value="true"/>
         <property key="labeling/fontLetterSpacing" value="0"/>
         <property key="labeling/fontLimitPixelSize" value="false"/>
         <property key="labeling/fontMaxPixelSize" value="10000"/>
@@ -1659,7 +1659,7 @@ def my_form_open(dialog, layer, feature):
         <property key="labeling/fontSizeMapUnitMinScale" value="0"/>
         <property key="labeling/fontStrikeout" value="false"/>
         <property key="labeling/fontUnderline" value="false"/>
-        <property key="labeling/fontWeight" value="50"/>
+        <property key="labeling/fontWeight" value="63"/>
         <property key="labeling/fontWordSpacing" value="0"/>
         <property key="labeling/formatNumbers" value="false"/>
         <property key="labeling/isExpression" value="true"/>
@@ -1793,7 +1793,7 @@ def my_form_open(dialog, layer, feature):
         <selectedonly on=""/>
       </labelattributes>
       <SingleCategoryDiagramRenderer diagramType="Pie">
-        <DiagramCategory penColor="#000000" labelPlacementMethod="XHeight" penWidth="0" diagramOrientation="Up" minimumSize="0" barWidth="5" penAlpha="255" maxScaleDenominator="1e+08" backgroundColor="#ffffff" transparency="0" width="15" scaleDependency="Area" backgroundAlpha="255" angleOffset="1440" scaleBasedVisibility="0" enabled="0" height="15" sizeType="MM" minScaleDenominator="-4.65661e-10">
+        <DiagramCategory penColor="#000000" labelPlacementMethod="XHeight" penWidth="0" diagramOrientation="Up" minimumSize="0" barWidth="5" penAlpha="255" maxScaleDenominator="1e+08" backgroundColor="#ffffff" transparency="0" width="15" scaleDependency="Area" backgroundAlpha="255" angleOffset="1440" scaleBasedVisibility="0" enabled="0" height="15" sizeType="MM" minScaleDenominator="0">
           <fontProperties description="Ubuntu,11,-1,5,50,0,0,0,0,0" style=""/>
         </DiagramCategory>
       </SingleCategoryDiagramRenderer>
@@ -9279,8 +9279,10 @@ def my_form_open(dialog, layer, feature):
         <value>TH_Province_In_Point20160628145102042</value>
         <value>TH_Province_Out_Point20160628145116333</value>
         <value>TH_Province_PolyCentroid_Point20160628144925382</value>
+        <value>TH_Province_Connection_Total_Magnitude_Line20160704111402912</value>
       </LayerSnappingList>
       <LayerSnappingEnabledList type="QStringList">
+        <value>enabled</value>
         <value>enabled</value>
         <value>enabled</value>
         <value>enabled</value>
@@ -9313,8 +9315,10 @@ def my_form_open(dialog, layer, feature):
         <value>2</value>
         <value>2</value>
         <value>2</value>
+        <value>2</value>
       </LayerSnappingToleranceUnitList>
       <LayerSnapToList type="QStringList">
+        <value>to_vertex</value>
         <value>to_vertex</value>
         <value>to_vertex</value>
         <value>to_vertex</value>
@@ -9333,6 +9337,7 @@ def my_form_open(dialog, layer, feature):
       <DefaultSnapType type="QString">off</DefaultSnapType>
       <DefaultSnapTolerance type="double">0</DefaultSnapTolerance>
       <LayerSnappingToleranceList type="QStringList">
+        <value>0.000000</value>
         <value>0.000000</value>
         <value>0.000000</value>
         <value>0.000000</value>
