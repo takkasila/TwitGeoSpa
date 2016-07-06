@@ -9,3 +9,5 @@ TH_Province_Connection_TwoWay_3Days.csv filter=lfs diff=lfs merge=lfs -text
 TH_Province_Connection_TwoWay_7Days.csv filter=lfs diff=lfs merge=lfs -text
 TH_Province_Connection_TwoWay_Line.csv filter=lfs diff=lfs merge=lfs -text
 TH_Province_Point.csv filter=lfs diff=lfs merge=lfs -text
+TH_Plane_TravelHistory_Filtered_Time_Line.csv filter=lfs diff=lfs merge=lfs -text
+TH_Plane_TravelHistory_Unfiltered_Time_Line.csv filter=lfs diff=lfs merge=lfs -text

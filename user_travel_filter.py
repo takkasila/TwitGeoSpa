@@ -48,8 +48,8 @@ def writeUsertravelPoint(filtUsers, outputFileName, pvcmDict):
 def genPolyLine(p1, p2):
     return 'LINESTRING(' + str(p1.x) + ' ' + str(p1.y) + ', ' + str(p2.x) + ' ' + str(p2.y) +')'
 
-# Unfilterd Time: 3732
-# Filterd Time: 1487
+# Unfilterd Time: 1712
+# Filterd Time: 1313
 if __name__ == '__main__':
     if len(sys.argv) < 4:
         print 'Please insert shapefile, twit data processed.csv and output filename'
@@ -60,6 +60,6 @@ if __name__ == '__main__':
     userTracker = UserTracker(sys.argv[2])
     print 'Total users: {}'.format(len(userTracker.uidList))
     userTracker.createUserCrossTravelData(pvPHolder.pvcmDict)
-    planeUserTuple = filterUser(userTracker.uidList.values(), pvPHolder.pvcmDict, speedT = 300, distT = 50, timeT = 0.5, isAbove = True)
+    planeUserTuple = filterUser(userTracker.uidList.values(), pvPHolder.pvcmDict, speedT = 300, distT = 400, timeT = 0.5, isAbove = True)
     writeUsertravelPoint(planeUserTuple, sys.argv[3], pvPHolder.pvcmDict)
     print 'Plane users: {}'.format(len(planeUserTuple))
