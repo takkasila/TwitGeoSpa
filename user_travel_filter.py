@@ -7,24 +7,30 @@ import operator
 def filterUser(userList, pvcmDict, speedT=0, distT=0, timeT=0, isAbove = True):
     'Threshold: Speed in km/hr, distance in km, time in hour'
     opt = operator.ge if isAbove else operator.lt
-    filtUsers = {}
+    filtUserTuple = {}
     for user in userList:
         if len(user.crossTravelData) == 0:
             continue
-
         for crossTravelData in user.crossTravelData.values():
             if opt(crossTravelData.distance,distT) and opt(crossTravelData.time,timeT) and opt(crossTravelData.speed,speedT):
-                filtUsers[user.uid] = user
+                filtUserTuple[user.uid] = (user, crossTravelData.travelFrom.time)
                 break
-    return filtUsers
+    return filtUserTuple
 
-def writeUsertravelPoint(userList):
-    for user in userList.values():
-        print '------------'
-        print len(user.history)
-        print len(user.crossTravelData)
-        # for hist in user.history.values():
-            # print 
+def writeUsertravelPoint(filtUsers):
+    for user, startPlaneTime in filtUsers.values():
+        print '############################'
+        for hist in user.history.values():
+            print hist
+        print '----------------------------'
+        for hist in user.history.values():
+            if hist.time < startPlaneTime:
+                continue
+            elif hist.time == startPlaneTime:
+                print user.crossTravelData[hist.time]
+                print hist
+            else:
+                print hist
 
 if __name__ == '__main__':
     if len(sys.argv) < 3:
@@ -36,5 +42,6 @@ if __name__ == '__main__':
     userTracker = UserTracker(sys.argv[2])
     print 'Total users: {}'.format(len(userTracker.uidList))
     userTracker.createUserCrossTravelData(pvPHolder.pvcmDict)
-    planeUsers = filterUser(userTracker.uidList.values(), pvPHolder.pvcmDict, speedT = 300, distT = 50, timeT = 0, isAbove = True)
-    writeUsertravelPoint(planeUsers)
+    planeUserTuple = filterUser(userTracker.uidList.values(), pvPHolder.pvcmDict, speedT = 300, distT = 50, timeT = 0, isAbove = True)
+    writeUsertravelPoint(planeUserTuple)
+    print 'Plane users: {}'.format(len(planeUserTuple))
