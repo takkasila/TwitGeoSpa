@@ -17,24 +17,42 @@ def filterUser(userList, pvcmDict, speedT=0, distT=0, timeT=0, isAbove = True):
                 break
     return filtUserTuple
 
-def writeUsertravelPoint(filtUsers):
+def writeUsertravelPoint(filtUsers, outputFileName, pvcmDict):
+    lineWriter = csv.DictWriter(open(outputFileName, 'wb'), delimiter = ';', fieldnames=['uid', 'from', 'to', 'distance', 'time in hour', 'speed', 'polyline'])
+    lineWriter.writeheader()
     for user, startPlaneTime in filtUsers.values():
-        print '############################'
+        preHist = None
         for hist in user.history.values():
-            print hist
-        print '----------------------------'
-        for hist in user.history.values():
-            if hist.time < startPlaneTime:
+            if hist.time <= startPlaneTime:
+                preHist = hist
                 continue
-            elif hist.time == startPlaneTime:
-                print user.crossTravelData[hist.time]
-                print hist
-            else:
-                print hist
 
+            startP = pvcmDict[preHist.name].polyCentroid
+            endP = pvcmDict[hist.name].polyCentroid
+            distance = vincenty(startP.getTuple()[::-1], endP.getTuple()[::-1])
+            time = (hist.time - preHist.time)/3600.0
+            speed = distance / time
+
+            lineWriter.writerow({
+                'uid' : user.uid
+                , 'from' : preHist.name
+                , 'to' : hist.name
+                , 'distance' : distance
+                , 'time in hour' : time
+                , 'speed' : speed
+                , 'polyline': genPolyLine(preHist.point, hist.point)
+            })
+
+            preHist = hist
+
+def genPolyLine(p1, p2):
+    return 'LINESTRING(' + str(p1.x) + ' ' + str(p1.y) + ', ' + str(p2.x) + ' ' + str(p2.y) +')'
+
+# Unfilterd Time: 3732
+# Filterd Time: 1487
 if __name__ == '__main__':
-    if len(sys.argv) < 3:
-        print 'Please insert shapefile and twit data processed.csv'
+    if len(sys.argv) < 4:
+        print 'Please insert shapefile, twit data processed.csv and output filename'
         exit()
 
     pvPHolder = ProvinceCMPointHolder(shapefile.Reader(sys.argv[1]), abbrCsv = './Province/Province from Wiki Html table to CSV/ThailandProvinces_abbr.csv')
@@ -42,6 +60,6 @@ if __name__ == '__main__':
     userTracker = UserTracker(sys.argv[2])
     print 'Total users: {}'.format(len(userTracker.uidList))
     userTracker.createUserCrossTravelData(pvPHolder.pvcmDict)
-    planeUserTuple = filterUser(userTracker.uidList.values(), pvPHolder.pvcmDict, speedT = 300, distT = 50, timeT = 0, isAbove = True)
-    writeUsertravelPoint(planeUserTuple)
+    planeUserTuple = filterUser(userTracker.uidList.values(), pvPHolder.pvcmDict, speedT = 300, distT = 50, timeT = 0.5, isAbove = True)
+    writeUsertravelPoint(planeUserTuple, sys.argv[3], pvPHolder.pvcmDict)
     print 'Plane users: {}'.format(len(planeUserTuple))

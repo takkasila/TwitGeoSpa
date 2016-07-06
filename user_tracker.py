@@ -2,6 +2,8 @@ import sys
 import csv
 from collections import OrderedDict
 from geopy.distance import vincenty
+sys.path.insert(0, './Province')
+from quad_tree import Point
 
 class TravelData:
     def __init__(self, speed=0, time=0, distance=0, travelFrom = None, travelTo = None):
@@ -17,11 +19,12 @@ class TravelData:
             , None if self.travelTo == None else str(self.travelTo.time)+' '+ self.travelTo.name)
 
 class HistoryData:
-    def __init__(self, name, time):
+    def __init__(self, name, time, point):
         self.name = name
         self.time = time
+        self.point = point
     def __str__(self):
-        return str(self.time) +'\t' + self.name
+        return '{}\t{}\t{}'.format(self.time, self.name, self.point)
 
 class User:
     def __init__(self, uid):
@@ -91,6 +94,7 @@ class UserTracker:
                 HistoryData(
                     name = row['province']
                     , time = int(row['epoch'])
+                    , point = Point(float(row['lon']), float(row['lat']))
                 )
             )
 
