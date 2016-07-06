@@ -6,36 +6,25 @@ import operator
 
 def filterUser(userList, pvcmDict, speedT=0, distT=0, timeT=0, isAbove = True):
     'Threshold: Speed in km/hr, distance in km, time in hour'
+    opt = operator.ge if isAbove else operator.lt
     filtUsers = {}
     for user in userList:
-        if len(user.mergeHist) < 2:
+        if len(user.crossTravelData) == 0:
             continue
 
-        startHist = True
-        preHist = None
-        for hist in user.mergeHist.values():
-            if startHist:
-                startHist = False
-                preHist = hist
-                continue
-
-            startP = pvcmDict[preHist.name].polyCentroid
-            endP = pvcmDict[hist.name].polyCentroid
-            travelDist = vincenty(startP.getTuple()[::-1], endP.getTuple()[::-1])
-            travelTime = (hist.time - preHist.time)/3600.0
-            travelSpeed = travelDist / travelTime
-
-            opt = operator.ge if isAbove else operator.lt
-
-            if opt(travelDist,distT) and opt(travelTime,timeT) and opt(travelSpeed,speedT):
+        for crossTravelData in user.crossTravelData.values():
+            if opt(crossTravelData.distance,distT) and opt(crossTravelData.time,timeT) and opt(crossTravelData.speed,speedT):
                 filtUsers[user.uid] = user
-                print '-----------------------'
-                print 'time: '+str(travelTime)
-                print 'dist: '+str(travelDist)
-                print 'speed: '+str(travelSpeed)
                 break
-
     return filtUsers
+
+def writeUsertravelPoint(userList):
+    for user in userList.values():
+        print '------------'
+        print len(user.history)
+        print len(user.crossTravelData)
+        # for hist in user.history.values():
+            # print 
 
 if __name__ == '__main__':
     if len(sys.argv) < 3:
@@ -46,6 +35,6 @@ if __name__ == '__main__':
 
     userTracker = UserTracker(sys.argv[2])
     print 'Total users: {}'.format(len(userTracker.uidList))
-
-    planeUsers = filterUser(userTracker.uidList.values(), pvPHolder.pvcmDict, speedT = 300, distT = 50, timeT = 0.5, isAbove = True)
-    print 'Plane users: {}'.format(len(planeUsers))
+    userTracker.createUserCrossTravelData(pvPHolder.pvcmDict)
+    planeUsers = filterUser(userTracker.uidList.values(), pvPHolder.pvcmDict, speedT = 300, distT = 50, timeT = 0, isAbove = True)
+    writeUsertravelPoint(planeUsers)

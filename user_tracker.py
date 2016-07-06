@@ -3,7 +3,7 @@ import csv
 from collections import OrderedDict
 from geopy.distance import vincenty
 
-class SpeedData:
+class TravelData:
     def __init__(self, speed=0, time=0, distance=0, travelFrom = None, travelTo = None):
         self.speed = speed
         self.time = time
@@ -13,13 +13,15 @@ class SpeedData:
 
     def __str__(self):
         return 'Speed: {}, Distance: {}, Time: {} | from {} to {}'.format(self.speed, self.distance, self.time
-            , None if self.travelFrom == None else self.travelFrom.name
-            , None if self.travelTo == None else self.travelTo.name)
+            , None if self.travelFrom == None else str(self.travelFrom.time) +' '+ self.travelFrom.name
+            , None if self.travelTo == None else str(self.travelTo.time)+' '+ self.travelTo.name)
 
 class HistoryData:
     def __init__(self, name, time):
         self.name = name
         self.time = time
+    def __str__(self):
+        return str(self.time) +'\t' + self.name
 
 class User:
     def __init__(self, uid):
@@ -33,7 +35,7 @@ class User:
         self.history = OrderedDict(sorted(self.history.items()))
 
     def createMergeHist(self):
-        'Reduce hist of same province in time. Should be call after sorted'
+        'Reduce hist of same province in time by choose the first apperance. Only use in getting history names purpose. Should be call after sorted'
         if(len(self.history) == 0):
             return
         self.mergeHist = {}
@@ -44,40 +46,35 @@ class User:
                 previousName = hist.name
         self.mergeHist = OrderedDict(sorted(self.mergeHist.items()))
 
+    def createCrossTravelData(self, pvcmDict):
+        self.crossTravelData = OrderedDict()
+        isStartHist = True
+        preHist = None
+        for hist in self.history.values():
+            if isStartHist:
+                isStartHist = False
+                preHist = hist
+                continue
+
+            if hist.name != preHist.name:
+                travelData = TravelData()
+                startP = pvcmDict[preHist.name].polyCentroid
+                endP = pvcmDict[hist.name].polyCentroid
+                travelData.distance = vincenty(startP.getTuple()[::-1], endP.getTuple()[::-1])
+                travelData.time = (hist.time - preHist.time)/3600.0
+                travelData.speed = travelData.distance / travelData.time
+                travelData.travelFrom = preHist
+                travelData.travelTo = hist
+                self.crossTravelData[preHist.time] = travelData
+
+            preHist = hist
+
     def getUniqueProvinceHist(self):
         provinceNames = []
         for hist in self.history.values():
             if (hist.name not in provinceNames):
                 provinceNames.append(hist.name)
         return provinceNames
-
-    def calMaxSpeedData(self, pvcmDict):
-        self.maxSpeedData = SpeedData(0, 0, 0)
-        if len(self.mergeHist) < 2:
-            return
-
-        startHist = True
-        preHist = None
-        for hist in self.mergeHist.values():
-            if startHist:
-                startHist = False
-                preHist = hist
-                continue
-
-            startP = pvcmDict[preHist.name].polyCentroid
-            endP = pvcmDict[hist.name].polyCentroid
-            travelDist = vincenty(startP.getTuple()[::-1], endP.getTuple()[::-1])
-            travelTime = (hist.time - preHist.time)/3600.0
-            travelSpeed = travelDist / travelTime
-
-            if travelSpeed > self.maxSpeedData.speed:
-                self.maxSpeedData.speed = travelSpeed
-                self.maxSpeedData.distance = travelDist
-                self.maxSpeedData.time = travelTime
-                self.maxSpeedData.travelFrom = preHist
-                self.maxSpeedData.travelTo = hist
-
-            preHist = hist
 
 class UserTracker:
     def __init__(self, twitDataCsv):
@@ -101,11 +98,10 @@ class UserTracker:
             user.sortHistory()
             user.createMergeHist()
 
-    def calUserMaxSpeed(self, pvcmDict):
+    def createUserCrossTravelData(self, pvcmDict):
         'Calculate and set each user max speed'
         for user in self.uidList.values():
-            user.calMaxSpeedData(pvcmDict)
-
+            user.createCrossTravelData(pvcmDict)
 
 if __name__ == '__main__':
 
@@ -115,8 +111,6 @@ if __name__ == '__main__':
 
     userTracker = UserTracker(twitDataCsv= sys.argv[1])
 
-    for user in userTracker.uidList.items():
-        if user[0] == 728102909175468032:
-            print user
-            print user[1].history.values()[0].name
-            print len(user[1].history.values())
+    for user in userTracker.uidList.values():
+        print user.uid, len(user.history)
+    print 'Total user:', len(userTracker.uidList)
