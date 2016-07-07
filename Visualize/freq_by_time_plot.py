@@ -15,7 +15,6 @@ if __name__ == '__main__':
     twitReader = csv.DictReader(open(sys.argv[1], 'rb'), delimiter = ',', fieldnames=['uid','lat','lon','province','province_abbr','province_abbr_index','epoch','date','time'])
 
     hourFreq = [0 for x in range(24)]
-    # TODO
     hourFreqDays = [[0 for x in range(24)] for y in range(7)]
     dayFreq = [0 for x in range(7)]
     everyDayFreq = {}

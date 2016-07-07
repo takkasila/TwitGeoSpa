@@ -8,6 +8,7 @@ import statistics
 import operator
 
 
+# TODO: Update ticks, bars, scale, etc.
 if __name__ == '__main__':
 
     # Plot travel frequency
