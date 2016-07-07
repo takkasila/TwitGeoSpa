@@ -1,5 +1,0 @@
-TH.dbf filter=lfs diff=lfs merge=lfs -text
-TH.prj filter=lfs diff=lfs merge=lfs -text
-TH.qpj filter=lfs diff=lfs merge=lfs -text
-TH.shp filter=lfs diff=lfs merge=lfs -text
-TH.shx filter=lfs diff=lfs merge=lfs -text

@@ -1,6 +1,0 @@
-province.cpg filter=lfs diff=lfs merge=lfs -text
-province.dbf filter=lfs diff=lfs merge=lfs -text
-province.prj filter=lfs diff=lfs merge=lfs -text
-province.qpj filter=lfs diff=lfs merge=lfs -text
-province.shp filter=lfs diff=lfs merge=lfs -text
-province.shx filter=lfs diff=lfs merge=lfs -text
