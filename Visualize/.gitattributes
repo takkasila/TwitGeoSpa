@@ -13,3 +13,5 @@ TH_Plane_TravelHistory_Filtered_Time_Line.csv filter=lfs diff=lfs merge=lfs -tex
 TH_Plane_TravelHistory_Unfiltered_Time_Line.csv filter=lfs diff=lfs merge=lfs -text
 TH_Plane_History_Line.csv filter=lfs diff=lfs merge=lfs -text
 TH_Plane_Travel_History_Line.csv filter=lfs diff=lfs merge=lfs -text
+QGIS/TH[[:space:]]connection.qgs filter=lfs diff=lfs merge=lfs -text
+QGIS/TH[[:space:]]provinces[[:space:]]block.qgs filter=lfs diff=lfs merge=lfs -text
