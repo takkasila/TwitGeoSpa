@@ -5,7 +5,7 @@ from geopy.distance import vincenty
 import operator
 
 def filterPlaneUser(userList, pvcmDict):
-    'Threshold: Speed in km/hr, distance in km, time in hour. Reture dict list of user with injected filteredTime list field'
+    'Reture dict list of user while also injected filteredTime list field'
     filtUser = {}
     for user in userList:
         if len(user.crossTravelData) == 0:
@@ -20,7 +20,39 @@ def filterPlaneUser(userList, pvcmDict):
 
     return filtUser
 
-def writeUsertravelPoint(filtUsers, outputFileName, pvcmDict):
+def writeUserFilterdPoint(filtUsers, outputFileName, pvcmDict):
+    lineWriter = csv.DictWriter(open(outputFileName, 'wb'), delimiter = ';', fieldnames=['uid', 'from', 'to', 'distance', 'time in hour', 'speed', 'polyline'])
+    lineWriter.writeheader()
+
+    for user in filtUsers.values():
+        preHist = None
+        startHist = True
+        markTravelTime = 0
+        arrivedTime = user.crossTravelData[user.filteredTime[markTravelTime]].travelTo.time
+        for hist in user.history.values():
+            if startHist:
+                startHist = False
+                preHist = hist
+                continue
+
+            if hist.time == arrivedTime:
+                ctData = user.crossTravelData[user.filteredTime[markTravelTime]]
+                lineWriter.writerow({
+                    'uid' : user.uid
+                    , 'from' : preHist.name
+                    , 'to' : hist.name
+                    , 'distance' : ctData.distance
+                    , 'time in hour' : ctData.time
+                    , 'speed' : ctData.speed
+                    , 'polyline' : genPolyLine(preHist.point, hist.point)
+                })
+                markTravelTime += 1
+                if markTravelTime >= len(user.filteredTime):
+                    break
+
+            preHist = hist
+
+def writeUserTravelPoint(filtUsers, outputFileName, pvcmDict):
     lineWriter = csv.DictWriter(open(outputFileName, 'wb'), delimiter = ';', fieldnames=['uid', 'from', 'to', 'distance', 'time in hour', 'speed', 'polyline'])
     lineWriter.writeheader()
 
@@ -65,8 +97,8 @@ def genPolyLine(p1, p2):
     return 'LINESTRING(' + str(p1.x) + ' ' + str(p1.y) + ', ' + str(p2.x) + ' ' + str(p2.y) +')'
 
 if __name__ == '__main__':
-    if len(sys.argv) < 4:
-        print 'Please insert shapefile, twit data processed.csv and output filename'
+    if len(sys.argv) < 5:
+        print 'Please insert shapefile, twit data processed.csv and output filenames'
         exit()
 
     pvPHolder = ProvinceCMPointHolder(shapefile.Reader(sys.argv[1]), abbrCsv = './Province/Province from Wiki Html table to CSV/ThailandProvinces_abbr.csv')
@@ -75,5 +107,6 @@ if __name__ == '__main__':
     print 'Total users: {}'.format(len(userTracker.uidList))
     userTracker.createUserCrossTravelData(pvPHolder.pvcmDict)
     planeUser = filterPlaneUser(userTracker.uidList.values(), pvPHolder.pvcmDict)
-    writeUsertravelPoint(planeUser, sys.argv[3], pvPHolder.pvcmDict)
+    # writeUserTravelPoint(planeUser, sys.argv[3], pvPHolder.pvcmDict)
+    writeUserFilterdPoint(planeUser, sys.argv[4], pvPHolder.pvcmDict)
     print 'Plane users: {}'.format(len(planeUser))
