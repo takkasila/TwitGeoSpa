@@ -4,6 +4,7 @@ import csv
 from province_point import *
 from collections import OrderedDict
 from operator import itemgetter
+import operator
 
 def readConnectionTable(csvFile):
     'Return 2D dict of province connection table'
@@ -36,7 +37,12 @@ def writeConnectionLink(pvConnTable, pvcmDict, csvFile, isTwoWay):
                 , 'polyline' : genPolyLine(pvcmDict[pvDict[0]].outP, pvcmDict[link[0]].inP) if isTwoWay else genPolyLine(pvcmDict[pvDict[0]].polyCentroid, pvcmDict[link[0]].polyCentroid)
             })
 
-def writeConnectionLinkMagnitude(pvConnTable, pvcmDict, csvFile):
+def writeConnectionLinkMagnitude(pvConnTable, pvcmDict, csvFile, sign):
+    if sign == '+':
+        opt = operator.add
+    elif sign =='-':
+        opt = operator.sub
+
     pvList = OrderedDict()
     i = 0
     for pv in pvConnTable.keys():
@@ -47,7 +53,8 @@ def writeConnectionLinkMagnitude(pvConnTable, pvcmDict, csvFile):
     connLineWriter.writeheader()
     for x in range(len(pvConnTable)):
         for y in range(x, len(pvConnTable)):
-            magnitude = pvConnTable[pvList[x]][pvList[y]] - pvConnTable[pvList[y]][pvList[x]]
+            # magnitude = pvConnTable[pvList[x]][pvList[y]] - pvConnTable[pvList[y]][pvList[x]]
+            magnitude = opt(pvConnTable[pvList[x]][pvList[y]], pvConnTable[pvList[y]][pvList[x]])
 
             if magnitude > 0:
                 fromPv = pvList[x]
@@ -77,6 +84,8 @@ if __name__ == '__main__':
     if isTwoWay:
         isMagnitude = raw_input('Is magnitude? (y/n): ').lower()
         isMagnitude = True if isMagnitude == 'y' else False
+    if isMagnitude:
+        sign = raw_input('Magnitude operator (+/-): ')
 
     pvcmHolder = ProvinceCMPointHolder(shapefile.Reader(sys.argv[1]), abbrCsv = '../Province/Province from Wiki Html table to CSV/ThailandProvinces_abbr.csv')
     pvConnTable = readConnectionTable(sys.argv[2])
@@ -84,4 +93,4 @@ if __name__ == '__main__':
     if isMagnitude == False:
         writeConnectionLink(pvConnTable, pvcmHolder.pvcmDict, sys.argv[3], isTwoWay)
     else:
-        writeConnectionLinkMagnitude(pvConnTable, pvcmHolder.pvcmDict, sys.argv[3])
+        writeConnectionLinkMagnitude(pvConnTable, pvcmHolder.pvcmDict, sys.argv[3], sign)
