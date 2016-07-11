@@ -8,6 +8,8 @@ import operator
 
 def readConnectionTable(csvFile):
     'Return 2D dict of province connection table'
+    isColMajor = raw_input('Data is column major? (y/n): ')
+    isColMajor = True if isColMajor == 'y' else False
     tableReader = csv.reader(open(csvFile, 'rb'), delimiter = ',')
     pvList = OrderedDict()
     header = True
@@ -21,7 +23,10 @@ def readConnectionTable(csvFile):
             pvName = row[0]
             del row[0]
             for i in range(len(row)):
-                pvList[pvName][pvList.keys()[i]] = float(row[i])
+                if isColMajor:
+                    pvList[pvList.keys()[i]][pvName] = float(row[i])
+                else:
+                    pvList[pvName][pvList.keys()[i]] = float(row[i])
 
     return pvList
 
