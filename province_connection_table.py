@@ -7,15 +7,18 @@ from provinces import *
 from user_tracker import *
 
 class ProvinceTable:
-    def __init__(self, provinces, timeWindow):
+    def __init__(self, provinces):
         self.provinces = provinces
         self.table = [[0 for x in range(len(provinces))] for y in range(len(provinces))]
         self.table_norm = [[0 for x in range(len(provinces))] for y in range(len(provinces))]
-        self.timeWindow = timeWindow[0] * (24*60*60) + timeWindow[1] * (60*60)
 
         self.provinceNameList = []
         for province in self.provinces:
             self.provinceNameList.append(province.name)
+
+    def setTimeWindow(self, hours, days):
+        'Set travel time window in seconds'
+        self.timeWindow = days * (24*60*60) + hours * (60*60)
 
     def createTableOfCommonUID(self):
         for f1 in range(len(self.provinces)):
@@ -31,6 +34,20 @@ class ProvinceTable:
                 except:
                     self.table_norm[f1][f2] = 0
                     self.table_norm[f2][f1] = 0
+
+        self.__tableToDataFrame()
+
+    def normConnBySelfOverallConn(self):
+        for y in range(len(self.table)):
+            totalCommon = 0.0
+            for x in range(len(self.table)):
+                totalCommon += self.table[y][x]
+
+            if totalCommon == 0:
+                continue
+
+            for x in range(len(self.table)):
+                self.table[y][x] /= totalCommon
 
         self.__tableToDataFrame()
 
@@ -57,39 +74,46 @@ class ProvinceTable:
 
         self.dataFrame_norm = pandas.DataFrame(data = self.table_norm, index= self.provinceNameList, columns= self.provinceNameList)
 
-    def exportToCSV(self, filename):
+    def exportToCSV(self, filename, majorCol = False):
+        if majorCol:
+            self.dataFrame = self.dataFrame.transpose()
         self.dataFrame.to_csv(filename)
 
-    def exportToCSV_NormalizePopulation(self, filename):
+    def exportToCSV_NormalizePopulation(self, filename, majorCol = False):
+        if majorCol:
+            self.dataFrame_norm = self.dataFrame_norm.transpose()
         self.dataFrame_norm.to_csv(filename)
 
-def createConnectionTable(dataCsv, outputCsv, side, timeWindow):
-    'Side: 1)Overall or 2)Two-side connection'
-    if side != 1 and side != 2:
-        print 'Please specific side correctly'
-        exit()
-
+def createConnectionTable(dataCsv, outputCsv, mode):
     provinceHolder = ProvinceHolder()
-    provinceTable = ProvinceTable(provinceHolder.provinces, timeWindow)
-
-    if side == 1:
+    provinceTable = ProvinceTable(provinceHolder.provinces)
+    isMajorCol = raw_input('Is column major? (y/n): ')
+    isMajorCol = True if isMajorCol=='y' else False
+    if mode == 1:
         provinceHolder.readDataFromCsv(csvFile = dataCsv)
         provinceTable.createTableOfCommonUID()
-        provinceTable.exportToCSV_NormalizePopulation(outputCsv[0:len(outputCsv)-4] +'_norm_population'+outputCsv[len(outputCsv)-4::1])
-
-    elif side == 2:
+        provinceTable.exportToCSV_NormalizePopulation(outputCsv[0:len(outputCsv)-4, isMajorCol] +'_norm_population'+outputCsv[len(outputCsv)-4::1])
+    elif mode == 2:
+        provinceHolder.readDataFromCsv(csvFile = dataCsv)
+        provinceTable.createTableOfCommonUID()
+        provinceTable.normConnBySelfOverallConn()
+    elif mode == 3:
+        print 'Insert travel time window in days and hours.'
+        days = input('Days: ')
+        hours = input('Hours: ')
+        provinceTable.setTimeWindow(days=days, hours=hours)
         userTracker = UserTracker(twitDataCsv= dataCsv)
         provinceTable.createTableOfTwosideConnection(userTracker)
+    else:
+        print 'Insert wrong mode.'
+        exit()
 
-    provinceTable.exportToCSV(outputCsv)
+    provinceTable.exportToCSV(outputCsv, isMajorCol)
 
 if __name__ == '__main__':
     if(len(sys.argv) < 3):
         print 'Please insert processed twitdata .csv and output file name.'
         exit()
 
-    side = input('Overall(1) or Two-side connection(2): ')
-    print 'Insert travel time window in days and hours.'
-    days = input('Days: ')
-    hours = input('Hours: ')
-    createConnectionTable(dataCsv = sys.argv[1], outputCsv = sys.argv[2], side = side, timeWindow = (days, hours))
+    mode = input('1. Table of common UID\n2. Table of common UID divided by total common UID of that province\n3. Table of two-way connection\nMode: ')
+    createConnectionTable(dataCsv = sys.argv[1], outputCsv = sys.argv[2], mode = mode)
