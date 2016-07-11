@@ -98,7 +98,7 @@ def genPolyLine(p1, p2):
 
 if __name__ == '__main__':
     if len(sys.argv) < 5:
-        print 'Please insert shapefile, twit data processed.csv and output filenames'
+        print 'Please insert\nInput: Shapefile, twit data processed.csv\nOutput:AfterTravelHistory.csv, TravelHistory.csv'
         exit()
 
     pvPHolder = ProvinceCMPointHolder(shapefile.Reader(sys.argv[1]), abbrCsv = './Province/Province from Wiki Html table to CSV/ThailandProvinces_abbr.csv')
@@ -107,6 +107,6 @@ if __name__ == '__main__':
     print 'Total users: {}'.format(len(userTracker.uidList))
     userTracker.createUserCrossTravelData(pvPHolder.pvcmDict)
     planeUser = filterPlaneUser(userTracker.uidList.values(), pvPHolder.pvcmDict)
-    # writeUserTravelPoint(planeUser, sys.argv[3], pvPHolder.pvcmDict)
+    writeUserTravelPoint(planeUser, sys.argv[3], pvPHolder.pvcmDict)
     writeUserFilterdPoint(planeUser, sys.argv[4], pvPHolder.pvcmDict)
     print 'Plane users: {}'.format(len(planeUser))

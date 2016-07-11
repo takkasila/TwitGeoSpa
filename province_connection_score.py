@@ -10,7 +10,7 @@ if __name__ == '__main__':
     provinceHolder.readDataFromCsv(csvFile = sys.argv[1])
     provinceTable.createTableOfCommonUID()
 
-    scoreWriter = csv.DictWriter(open(sys.argv[2], 'wb'), delimiter = ',', fieldnames=['name', 'score'])
+    scoreWriter = csv.DictWriter(open(sys.argv[2], 'wb'), delimiter = ',', fieldnames=['name', 'score', 'Number of UID'])
     scoreWriter.writeheader()
     for y in range(len(provinceTable.table)):
         totalConn = 0.0
@@ -23,4 +23,5 @@ if __name__ == '__main__':
         scoreWriter.writerow({
             'name' : provinceTable.provinces[y].name
             , 'score' : score
+            , 'Number of UID' : len(provinceTable.provinces[y].uidList)
         })
