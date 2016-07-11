@@ -92,7 +92,7 @@ def createConnectionTable(dataCsv, outputCsv, mode):
     if mode == 1:
         provinceHolder.readDataFromCsv(csvFile = dataCsv)
         provinceTable.createTableOfCommonUID()
-        provinceTable.exportToCSV_NormalizePopulation(outputCsv[0:len(outputCsv)-4, isMajorCol] +'_norm_population'+outputCsv[len(outputCsv)-4::1])
+        provinceTable.exportToCSV_NormalizePopulation(outputCsv[0:len(outputCsv)-4] +'_Norm_Population'+outputCsv[len(outputCsv)-4::1], isMajorCol)
     elif mode == 2:
         provinceHolder.readDataFromCsv(csvFile = dataCsv)
         provinceTable.createTableOfCommonUID()
