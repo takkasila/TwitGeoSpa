@@ -44,6 +44,7 @@ if __name__ == '__main__':
     plt.plot(travelFreq, 'ro', travelFreq, 'b-')
     plt.xlabel('Number of travel')
     plt.ylabel('Number of user')
+    plt.xticks(range(len(travelFreq)))
     plt.title('Travel between provinces')
     plt.show()
 
@@ -52,6 +53,7 @@ if __name__ == '__main__':
     plt.plot(tweetFreq, 'ro', tweetFreq, 'b-')
     plt.xlabel('Number of tweet')
     plt.ylabel('Number of user')
+    plt.xticks(range(len(tweetFreq)))
     plt.title('Tweet frequency')
     plt.show()
 
@@ -60,6 +62,7 @@ if __name__ == '__main__':
     plt.plot(provinceFreq, 'ro', provinceFreq, 'b-')
     plt.xlabel('Number of provinces')
     plt.ylabel('Number of user')
+    plt.xticks(range(len(provinceFreq)))
     plt.title('Living provinces per user')
     plt.show()
 

@@ -63,11 +63,6 @@ if __name__ == '__main__':
 
     # Plot tweet freq by day hour
     weekDayNames = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun']
-    # Sum all day
-    for i in range(len(hourFreq)):
-        hourFreq[i] /= (delta.days+1)
-    plt.plot(hourFreq, '-', linewidth = 3, label = 'Mean')
-    plt.plot(hourFreq, 'ro')
     # Seperate by day
     for f1 in range(len(hourFreqDays)):
         for f2 in range(len(hourFreqDays[f1])):
