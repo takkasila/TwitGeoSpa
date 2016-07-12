@@ -5,6 +5,7 @@ import twit_extract_feature
 import pandas
 from provinces import *
 from user_tracker import *
+from math import floor
 
 class ProvinceTable:
     def __init__(self, provinces):
@@ -20,13 +21,17 @@ class ProvinceTable:
         'Set travel time window in seconds'
         self.timeWindow = days * (24*60*60) + hours * (60*60)
 
-    def createTableOfCommonUID(self):
+    def createTableOfCommonUID(self, divider = None):
         for f1 in range(len(self.provinces)):
             for f2 in range(f1 + 1, len(self.provinces)):
                 totalIntersect = len(self.provinces[f1].findCommonUID(targetProvi= self.provinces[f2]))
-
-                self.table[f1][f2] = totalIntersect
-                self.table[f2][f1] = totalIntersect
+                if divider == None:
+                    self.table[f1][f2] = totalIntersect
+                    self.table[f2][f1] = totalIntersect
+                else:
+                    roundVal = int(floor(totalIntersect/divider))
+                    self.table[f1][f2] = roundVal
+                    self.table[f2][f1] = roundVal
                 try:
                     norm = float(totalIntersect) / ( len(self.provinces[f1].uidList) + len(self.provinces[f2].uidList) - totalIntersect)
                     self.table_norm[f1][f2] = norm
@@ -90,8 +95,9 @@ def createConnectionTable(dataCsv, outputCsv, mode):
     isMajorCol = raw_input('Is column major? (y/n): ')
     isMajorCol = True if isMajorCol=='y' else False
     if mode == 1:
+        in_divider = raw_input('Input divider (left blank if not divide): ')
         provinceHolder.readDataFromCsv(csvFile = dataCsv)
-        provinceTable.createTableOfCommonUID()
+        provinceTable.createTableOfCommonUID(divider = None if len(in_divider) == 0 else float(in_divider))
         provinceTable.exportToCSV_NormalizePopulation(outputCsv[0:len(outputCsv)-4] +'_Norm_Population'+outputCsv[len(outputCsv)-4::1], isMajorCol)
     elif mode == 2:
         provinceHolder.readDataFromCsv(csvFile = dataCsv)
