@@ -98,7 +98,7 @@ def genPolyLine(p1, p2):
 
 if __name__ == '__main__':
     if len(sys.argv) < 5:
-        print 'Please insert\nInput: Shapefile, twit data processed.csv\nOutput:AfterTravelHistory.csv, TravelHistory.csv'
+        print 'Please insert\nInput: Shapefile, twit data processed.csv\nOutput: AfterTravelHistory.csv, TravelHistory.csv'
         exit()
 
     pvPHolder = ProvinceCMPointHolder(shapefile.Reader(sys.argv[1]), abbrCsv = './Province/Province from Wiki Html table to CSV/ThailandProvinces_abbr.csv')
