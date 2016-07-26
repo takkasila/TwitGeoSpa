@@ -49,6 +49,8 @@ def writeUserFilterdPoint(filtUsers, outputFileName, pvcmDict):
                 markTravelTime += 1
                 if markTravelTime >= len(user.filteredTime):
                     break
+                else:
+                    arrivedTime = user.crossTravelData[user.filteredTime[markTravelTime]].travelTo.time
 
             preHist = hist
 
