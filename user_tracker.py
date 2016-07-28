@@ -80,13 +80,16 @@ class User:
         return provinceNames
 
 class UserTracker:
-    def __init__(self, twitDataCsv):
+    def __init__(self, twitDataCsv, focusList = None):
         self.twitCsvReader = csv.DictReader(open(twitDataCsv))
         self.uidList = {}
 
         'uid,lat,lon,province,province_abbr,province_abbr_index,epoch,date,time'
         for row in self.twitCsvReader:
             id = int(row['uid'])
+            if focusList != None:
+                if id not in focusList:
+                    continue
             if(id not in self.uidList):
                 self.uidList[id] = User(id)
 
