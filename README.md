@@ -1,6 +1,8 @@
 # TwitGeoSpa
 Geospatial analysis and simulation using Twitter data
 
+## Read about my findings [here](https://docs.google.com/presentation/d/11GAJ6EZ7RocWcY3fF4XED8ySo1I-PuE6Ny2v68d6hzM)
+https://docs.google.com/presentation/d/11GAJ6EZ7RocWcY3fF4XED8ySo1I-PuE6Ny2v68d6hzM
 
 ## Utility tools
 - ### Finding country and province name with lat, lon  
